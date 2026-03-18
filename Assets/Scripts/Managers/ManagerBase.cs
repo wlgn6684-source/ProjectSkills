@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 //class     : 변수 o /함수 내용 o /객체생성 o
@@ -15,13 +16,13 @@ public abstract class ManagerBase : MonoBehaviour
     //Connect를 자유롭게 하기 위해서 Virtual을 사용
     //virtual을 쓰려면 생각해야 하는것
     //OCP => 개방폐쇄원칙 확장에는 열려있으나 수정에는 닫혀있게끔
-    public void Connect(GameManager newManager)
+    public IEnumerator Connect(GameManager newManager)
     { 
         _connectedManager = newManager;
-        OnConnected(newManager);
+        yield return OnConnected(newManager);
     }
 
-    protected abstract void OnConnected(GameManager newManager);
+    protected abstract IEnumerator OnConnected(GameManager newManager);
     protected abstract void OnDisconnected();
     public void Disconnected()
     {
