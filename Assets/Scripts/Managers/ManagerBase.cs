@@ -13,11 +13,14 @@ public abstract class ManagerBase : MonoBehaviour
 {
     GameManager _connectedManager;
 
+    public virtual int LoadCount => 1;
+
     //Connect를 자유롭게 하기 위해서 Virtual을 사용
     //virtual을 쓰려면 생각해야 하는것
     //OCP => 개방폐쇄원칙 확장에는 열려있으나 수정에는 닫혀있게끔
     public IEnumerator Connect(GameManager newManager)
     { 
+
         _connectedManager = newManager;
         yield return OnConnected(newManager);
     }

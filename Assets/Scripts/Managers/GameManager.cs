@@ -64,11 +64,12 @@ public class GameManager : MonoBehaviour
         //                          WaitForSeconds(10.0f)
         initializing = InitializeManagers();
         StartCoroutine(initializing);
+        
     }
 
     void OnDestroy() //매니저가 없어지면
     {
-        StopCoroutine(initializing);
+        if(initializing != null) StopCoroutine(initializing);
         DeleteManagers(); //하위 매니저들도 없어지게
     }
     //로딩을 하기 위한 기다림 함수
@@ -77,23 +78,41 @@ public class GameManager : MonoBehaviour
     //IEnumerator => Start
     //WaitForSeconds을 통해서 시간을 기다릴 수 있게끔
     IEnumerator InitializeManagers()
-    {
-        yield return CreateManager(ref _ui).Connect(this);
-        
-        yield return CreateManager(ref _data).Connect(this);
-       
-        yield return CreateManager(ref _save).Connect(this);
-        
-        yield return CreateManager(ref _setting).Connect(this);
-        
-        yield return CreateManager(ref _language).Connect(this);
-        
-        yield return CreateManager(ref _camera).Connect(this);
-        
-        yield return CreateManager(ref _audio).Connect(this);
-         
-        yield return CreateManager(ref _input).Connect(this);
-        
+    {   
+       int totalLoadCount = 0;
+       totalLoadCount += CreateManager(ref _ui).LoadCount;
+       totalLoadCount += CreateManager(ref _data).LoadCount;
+       totalLoadCount += CreateManager(ref _save).LoadCount;
+       totalLoadCount += CreateManager(ref _setting).LoadCount;
+       totalLoadCount += CreateManager(ref _language).LoadCount;
+       totalLoadCount += CreateManager(ref _camera).LoadCount;
+       totalLoadCount += CreateManager(ref _audio).LoadCount;
+       totalLoadCount += CreateManager(ref _input).LoadCount;
+
+
+        yield return _ui.Connect(this);
+        UIBase loadingUI = UIManager.ClaimOpenUI(UIType.Loading);
+        IProgress<int> loadingProgress = loadingUI as IProgress<int>;
+
+        loadingProgress?.Set(0, totalLoadCount);
+        yield return _data.Connect(this);
+        loadingProgress?.AddCurrent(1);
+        yield return _save.Connect(this);
+        loadingProgress?.AddCurrent(1);
+        yield return _setting.Connect(this);
+        loadingProgress?.AddCurrent(1);
+        yield return _language.Connect(this);
+        loadingProgress?.AddCurrent(1);
+        yield return _camera.Connect(this);
+        loadingProgress?.AddCurrent(1);
+        yield return _audio.Connect(this);
+        loadingProgress?.AddCurrent(1);
+        yield return _input.Connect(this);
+        loadingProgress?.AddCurrent(1);
+        yield return new WaitForSeconds(1.0f);
+
+        UIManager.ClaimCloseUI(UIType.Loading);
+
     }
     //
     //_input에다가 값을 넣고 싶다면

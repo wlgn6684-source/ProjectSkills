@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface IOpenable
 {
-    //ISP => Interface Segration Principle ÀÎÅÍÆäÀÌ½º ºĞ¸® ¿øÄ¢
+    //ISP => Interface Segration Principle ì¸í„°í˜ì´ìŠ¤ ë¶„ë¦¬ ì›ì¹™
     public bool IsOpen { get; }
     public void Open();
 
