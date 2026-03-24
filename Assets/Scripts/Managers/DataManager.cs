@@ -5,13 +5,16 @@
 //근데 앞에다가 이걸 원래 써야 해요!
 //NameSpace기 때문에
 using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 
 public class DataManager : ManagerBase
-{
-
+{   
+    static Dictionary<System.Type, Dictionary<string, Object>> dataDictionary = new();
+    
 
     //프로퍼티는 변수모양이지만 함수
     //                    int GetLoadCount();
@@ -63,6 +66,9 @@ public class DataManager : ManagerBase
        
 
         LoadAllFromAssetBundle<GameObject>("Global", ProgressOnLoad);
+
+        //GameObject prefab = LoadDataFile<GameObject>("Square 13");
+        //Instantiate(prefab, Random.insideUnitCircle * 5.0f, Random.rotation);
         
         
         yield return null;
@@ -111,10 +117,30 @@ public class DataManager : ManagerBase
     
     
 
-    public void SaveDataFile<T>(T target) where T : Object
+    public static void SaveDataFile<T>(T target) where T : Object
     {
         if (target == null) return;
-        Debug.Log(target);
+        Dictionary<string, Object> innerDictionary; 
+        if(!dataDictionary.TryGetValue(typeof(T), out innerDictionary))
+        {
+            innerDictionary = new();
+            dataDictionary.Add(typeof(T), innerDictionary);
+        }
+        innerDictionary.TryAdd(target.name, target);
+        
+    }
+
+    public static T LoadDataFile<T>(string fileName) where T : Object
+    {
+        if (dataDictionary.TryGetValue(typeof(T), out Dictionary<string, Object> innerDictionary))
+        {
+            if (innerDictionary.TryGetValue(fileName, out Object result))
+            { 
+                return result as T;
+            }
+        }
+
+        return null;
     }
 
     // Action => 행동
@@ -139,6 +165,7 @@ public class DataManager : ManagerBase
             actionForEachLoad();
         });
         await finder.Task;
+        finder.Release();
     }
 
     public async void LoadFileFromAssetBundle<T>(string address) where T : Object
