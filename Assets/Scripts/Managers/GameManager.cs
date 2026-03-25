@@ -1,6 +1,12 @@
 using System.Collections;
 using UnityEngine;
 
+public delegate void InitializeEvent();
+public delegate void UpdateEvent(float deltaTime);
+public delegate void DestroyEvent();
+
+
+
 public class GameManager : MonoBehaviour
 {
     static GameManager _instance;
@@ -31,7 +37,23 @@ public class GameManager : MonoBehaviour
     public InputManager Input => _input;
 
     IEnumerator initializing; //초기화 중 코루틴
-    
+
+
+    public static event InitializeEvent   InitializeManager;
+    public static event InitializeEvent   InitializeController;
+    public static event InitializeEvent   InitializeCharater;
+    public static event InitializeEvent   InitializeObject;
+    public static event UpdateEvent       OnUpdateManager;
+    public static event UpdateEvent       OnUpdateController;
+    public static event UpdateEvent       OnUpdateCharater;
+    public static event UpdateEvent       OnUpdateObject;
+    public static event DestroyEvent      OnDestroyManager;
+    public static event DestroyEvent      OnDestroyController;
+    public static event DestroyEvent      OnDestroyCharater;
+    public static event DestroyEvent      OnDestroyObject;
+
+   bool isPlaying = true;
+   bool isLoading = true;
 
     //Awake : 이 친구가 시작할 때 (깨어남)
     //OnEnabled : 이 친구가 시작할 때
@@ -112,6 +134,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         UIManager.ClaimCloseUI(UIType.Loading);
+        isLoading = false;
 
     }
     //
@@ -155,9 +178,59 @@ public class GameManager : MonoBehaviour
         return targetVarirable;
     }
 
+    public static void Pause()
+    {
+        Instance.isPlaying = false;
+    }
+    public static void UnPause()
+    {
+        Instance.isPlaying = true;
+    }
     void Update()
     {
+        if (isLoading) return;
         
+        //게임 진행을 할 수 있는지 여부를 조정할 수도 있다
+        //초기화 해야하는지 하지 말아야 하는지
+        //pause상태 => 업데이트를 하지 않는다.
+
+
+        //매니저를 초기화
+        InitializeManager?.Invoke();
+        InitializeManager = null;
+        //캐릭터를 초기화
+        InitializeCharater?.Invoke();
+        InitializeCharater = null;
+        //컨트롤러를 초기화
+        InitializeController?.Invoke();
+        InitializeController = null;
+        //오브젝트를 초기화
+        InitializeObject?.Invoke();
+        InitializeObject = null;
+
+        if (isPlaying)
+        { 
+            float deltaTime = Time.deltaTime;
+            //매니저가 업데이트 하는 경우
+            OnUpdateManager?.Invoke(deltaTime);
+            //컨트롤러를 업데이트 한다
+            OnUpdateController?.Invoke(deltaTime);
+            //캐릭터를 업데이트 한다
+            OnUpdateCharater?.Invoke(deltaTime);
+            //오브젝트를 업데이트를 한다
+            OnUpdateObject?.Invoke(deltaTime);
+        }
+
+        //오브젝트를 제거한다
+        OnDestroyObject?.Invoke();
+        //컨트롤러를 제거한다
+        OnDestroyController?.Invoke();
+        //캐릭터를 제거한다
+        OnDestroyCharater?.Invoke();
+        //매니저를 제거한다
+        OnDestroyManager?.Invoke();
+
+
     }
 
 
