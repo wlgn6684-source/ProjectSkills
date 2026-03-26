@@ -1,18 +1,33 @@
 using UnityEngine;
 
-public class MouseFollower : MonoBehaviour
+public class MouseFollower : MonoBehaviour, IFunctionable
 {
-
     void Start()
+    {
+        RegistrationFunctions();
+    }
+
+    void OnDestroy()
+    {
+        UnregistrationFunctions();
+    }
+    public void RegistrationFunctions()
     {
         InputManager.OnMouseLeftUp += CreateToMouse;
         InputManager.OnMouseRightDown += DestroyToMouse;
         
     }
+    public void UnregistrationFunctions()
+    {
+        InputManager.OnMouseLeftUp -= CreateToMouse;
+        InputManager.OnMouseRightDown -= DestroyToMouse;
+        
+    }
 
     void CreateToMouse(Vector2 screenPosition, Vector3 worldPosition)
     {
-        Instantiate(DataManager.LoadDataFile<GameObject>("Square 13"), worldPosition, Quaternion.identity);
+        GameObject inst = ObjectManager.CreateObject(DataManager.LoadDataFile<GameObject>("Square 13"));
+        inst.transform.position = worldPosition;
     }
 
     void MoveToMouse(Vector2 screenPosition, Vector3 worldPosition)
@@ -21,7 +36,7 @@ public class MouseFollower : MonoBehaviour
     }
     void DestroyToMouse(Vector2 screenPosition, Vector3 worldPosition)
     {
-        Debug.Log( GameManager.Instance.Input.GetGameObjectUnderCursor());
+        ObjectManager.DestroyObject( GameManager.Instance.Input.GetGameObjectUnderCursor());
     }
 
 }

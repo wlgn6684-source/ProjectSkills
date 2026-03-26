@@ -54,9 +54,22 @@ public class InputManager : ManagerBase
         GameManager.OnUpdateManager -= UpdateEvent;
     }
 
-    public void UpdateEvent(float deltaTime)
+    public void UpdateEvent(float deltaTime) 
     {
-        GameManager.Instance.Camera.GetRaycastResult2D(cursorScreenPosition, cursorHitList);
+        RefreshGameObjectUnderCursor();
+    }
+    
+    void RefreshGameObjectUnderCursor()
+    {
+        cursorHitList.Clear();
+        if (is2D)
+        {
+            GameManager.Instance.Camera.GetRaycastResult2D(cursorScreenPosition, cursorHitList);
+        }
+        else
+        {
+            GameManager.Instance.Camera.GetRaycastResult3D(cursorScreenPosition, cursorHitList);
+        }
     }
 
     public GameObject GetGameObjectUnderCursor()
@@ -105,7 +118,6 @@ public class InputManager : ManagerBase
 
         //마우스의 화면상 실제 픽셀위치
         Vector2 screenPosition = context.ReadValue<Vector2>();
-        Debug.Log(screenPosition);
         //화면상 x축으로 1픽셀
         //유니티에서 1칸은 1m
         //카메라를 기준으로 세상을 본다

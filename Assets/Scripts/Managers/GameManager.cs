@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour
     DataManager _data;
     public DataManager Data => _data;
 
+    ObjectManager _objectM;
+    public ObjectManager ObjectM => _objectM;
+
     SaveManager _save;
     public SaveManager Save => _save;
 
@@ -39,10 +42,10 @@ public class GameManager : MonoBehaviour
     IEnumerator initializing; //초기화 중 코루틴
 
 
-    public static event InitializeEvent   InitializeManager;
-    public static event InitializeEvent   InitializeController;
-    public static event InitializeEvent   InitializeCharater;
-    public static event InitializeEvent   InitializeObject;
+    public static event InitializeEvent   OnInitializeManager;
+    public static event InitializeEvent   OnInitializeController;
+    public static event InitializeEvent   OnInitializeCharacter;
+    public static event InitializeEvent   OnInitializeObject;
     public static event UpdateEvent       OnUpdateManager;
     public static event UpdateEvent       OnUpdateController;
     public static event UpdateEvent       OnUpdateCharater;
@@ -104,6 +107,7 @@ public class GameManager : MonoBehaviour
        int totalLoadCount = 0;
        totalLoadCount += CreateManager(ref _ui).LoadCount;
        totalLoadCount += CreateManager(ref _data).LoadCount;
+       totalLoadCount += CreateManager(ref _objectM).LoadCount;
        totalLoadCount += CreateManager(ref _save).LoadCount;
        totalLoadCount += CreateManager(ref _setting).LoadCount;
        totalLoadCount += CreateManager(ref _language).LoadCount;
@@ -118,6 +122,8 @@ public class GameManager : MonoBehaviour
 
         loadingProgress?.Set(0, totalLoadCount);
         yield return _data.Connect(this);
+        loadingProgress?.AddCurrent(1);
+        yield return _objectM.Connect(this);
         loadingProgress?.AddCurrent(1);
         yield return _save.Connect(this);
         loadingProgress?.AddCurrent(1);
@@ -150,6 +156,8 @@ public class GameManager : MonoBehaviour
     {
         //유저입력    InputManager
         Input?.Disconnected();
+        //오브젝트    ObjectManager
+        ObjectM?.Disconnected();
         //오디오      AudioManager
         Audio?.Disconnected();
         //언어        LanguageManager
@@ -186,27 +194,57 @@ public class GameManager : MonoBehaviour
     {
         Instance.isPlaying = true;
     }
+
+    public void InvokeInitiallizeEvent(ref InitializeEvent OriginEvent)
+    {
+        if (OriginEvent != null)
+        {
+            InitializeEvent CurrentEvent = OriginEvent;
+            OriginEvent = null;
+            CurrentEvent.Invoke();
+        }
+    }
+
+    public void InvokeDestroyEvent(ref DestroyEvent OriginEvent)
+    {
+        if (OriginEvent != null)
+        { 
+            DestroyEvent CurrentEvent = OriginEvent;
+            OriginEvent = null;
+            CurrentEvent.Invoke();
+        }
+    }
     void Update()
     {
         if (isLoading) return;
-        
+
         //게임 진행을 할 수 있는지 여부를 조정할 수도 있다
         //초기화 해야하는지 하지 말아야 하는지
         //pause상태 => 업데이트를 하지 않는다.
 
 
         //매니저를 초기화
-        InitializeManager?.Invoke();
-        InitializeManager = null;
+        InvokeInitiallizeEvent(ref OnInitializeManager);
+        //OnInitializeManager?.Invoke();
+        //OnInitializeManager = null;
         //캐릭터를 초기화
-        InitializeCharater?.Invoke();
-        InitializeCharater = null;
+        InvokeInitiallizeEvent(ref OnInitializeCharacter);
+        //if (OnInitializeCharacter != null)
+        //{
+        //    InitializeEvent currentInitializeCharater = OnInitializeCharacter;
+        //    OnInitializeCharacter = null;
+        //    currentInitializeCharater.Invoke();
+        //}
+        //OnInitializeCharater?.Invoke();
+        //OnInitializeCharater = null;
         //컨트롤러를 초기화
-        InitializeController?.Invoke();
-        InitializeController = null;
+        InvokeInitiallizeEvent(ref OnInitializeController);
+        //OnInitializeController?.Invoke();
+        //OnInitializeController = null;
         //오브젝트를 초기화
-        InitializeObject?.Invoke();
-        InitializeObject = null;
+        InvokeInitiallizeEvent(ref OnInitializeObject);
+        //OnInitializeObject?.Invoke();
+        //OnInitializeObject = null;
 
         if (isPlaying)
         { 
@@ -222,13 +260,17 @@ public class GameManager : MonoBehaviour
         }
 
         //오브젝트를 제거한다
-        OnDestroyObject?.Invoke();
+        InvokeDestroyEvent(ref OnDestroyObject);
+        //OnDestroyObject?.Invoke();
         //컨트롤러를 제거한다
-        OnDestroyController?.Invoke();
+        InvokeDestroyEvent(ref OnDestroyController);
+        //OnDestroyController?.Invoke();
         //캐릭터를 제거한다
-        OnDestroyCharater?.Invoke();
+        InvokeDestroyEvent(ref OnDestroyCharater);
+        //OnDestroyCharater?.Invoke();
         //매니저를 제거한다
-        OnDestroyManager?.Invoke();
+        InvokeDestroyEvent(ref OnDestroyManager);
+        //OnDestroyManager?.Invoke();
 
 
     }
