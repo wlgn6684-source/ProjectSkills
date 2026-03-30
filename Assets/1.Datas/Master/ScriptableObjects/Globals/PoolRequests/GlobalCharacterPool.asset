@@ -12,3 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f172d287297ace545869594516361da5, type: 3}
   m_Name: GlobalCharacterPool
   m_EditorClassIdentifier: Assembly-CSharp::PoolRequest
+  settings:
+  - poolName: SealThirtin
+    target: {fileID: 4429341219341135667, guid: 1b1f9d23b28be534eb5faeaaf893839f, type: 3}
+    countInitial: 5
+    countAdditional: 2

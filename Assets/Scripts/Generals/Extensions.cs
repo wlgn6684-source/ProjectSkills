@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 //확장 메소드들을 가지고 있을 친구들
@@ -40,5 +42,11 @@ public static class Extensions
     {
         if (target == null) return null;
         else                return target.gameObject.TryAddComponent<T>(); //NRVO
+    }
+
+    public static IEnumerator WaitforTask(this Task targetTask)
+    {
+        yield return new WaitUntil(() => targetTask.IsCompleted);
+        targetTask.Dispose();
     }
 }

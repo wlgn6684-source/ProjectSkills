@@ -1,6 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 
 [System.Serializable]
@@ -20,9 +20,22 @@ public class ObjectManager : ManagerBase
 {
     //시리얼 라이즈 가능한 => 유니티에서 보기 위해서 쓴 것
     //직렬화 변수
-    [SerializeField] PoolSetting[] testSettings;
+    //[SerializeField] PoolSetting[] testSettings;
+
+    List<PoolRequest> loadedPoolRequests = new();
+
+    Dictionary<string, ObjectPoolModule> poolDictionary = new();
+
     protected override IEnumerator OnConnected(GameManager newManager)
     {
+        RegistrationPool("GlobalCharacterPool");
+        RegistrationPool("GlobalControllerPool");
+        RegistrationPool("GlobalEffectPool");
+        RegistrationPool("GlobalObjectPool");
+        RegistrationPool("GlobalUIPool");
+
+        InitializePool();
+
         yield return null;
     }
 
@@ -30,6 +43,8 @@ public class ObjectManager : ManagerBase
     {
     
     }
+
+    
 
     //오브젝트 풀링
     //만드는 과정을 줄이고 싶음 로딩중에 하고 싶다.
@@ -160,7 +175,7 @@ public class ObjectManager : ManagerBase
         {
             foreach (var current in target.GetComponentsInChildren<IFunctionable>())
             {
-                current.RegistrationFunctions();
+                current?.RegistrationFunctions();
             }
         }
     }
@@ -178,6 +193,30 @@ public class ObjectManager : ManagerBase
         foreach (var current in target.GetComponentsInChildren<IFunctionable>())
         {
             current.UnregistrationFunctions();
+        }
+    }
+
+    public void RegistrationPool(string poolName)
+    {
+        PoolRequest currentRequest = DataManager.LoadDataFile<PoolRequest>(poolName);
+        if (currentRequest == null) return;
+        loadedPoolRequests.Add(currentRequest);
+        foreach (PoolSetting currentSetting in currentRequest.settings)
+        {
+            string currentName = currentSetting.poolName;
+            GameObject currentPrefab = currentSetting.target;
+            if (currentPrefab == null) continue;
+            if (poolDictionary.ContainsKey(currentName)) continue;
+
+            poolDictionary.Add(currentName, new(currentSetting));
+        }
+    }
+
+    public void InitializePool()
+    {
+        foreach (ObjectPoolModule currentPool in poolDictionary.Values)
+        {
+            currentPool?.Initialize();
         }
     }
 }

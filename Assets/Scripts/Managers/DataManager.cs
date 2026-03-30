@@ -6,6 +6,7 @@
 //NameSpace기 때문에
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -51,6 +52,7 @@ public class DataManager : ManagerBase
 
         int loaded = 0;
         int total = LoadCount;
+        string loadString = "Load Data";
 
         //람다는 왜 존재하나? 왜 가르쳐주는 거임?
         //람다 : 이름이 없는 함수 anonymous function
@@ -59,13 +61,16 @@ public class DataManager : ManagerBase
         {
             loaded++;
             progressUI?.AddCurrent(1);
-            statusUI?.SetCurrentStatus($"Load Data ({loaded}/{total})");
+            statusUI?.SetCurrentStatus($"{loadString} ({loaded}/{total})");
         };
 
-        
-       
 
-        LoadAllFromAssetBundle<GameObject>("Global", ProgressOnLoad);
+
+        loadString = "Load Game Objects";
+        yield return LoadAllFromAssetBundle<GameObject>("Global", ProgressOnLoad).WaitforTask();
+        loadString = "Load Pool Requests";
+        yield return LoadAllFromAssetBundle<PoolRequest>("Global", ProgressOnLoad).WaitforTask();
+
 
         //GameObject prefab = LoadDataFile<GameObject>("Square 13");
         //Instantiate(prefab, Random.insideUnitCircle * 5.0f, Random.rotation);
@@ -156,7 +161,7 @@ public class DataManager : ManagerBase
     //Func<float, int> => float Function(float a)
     //Func<float, string, int> => float Function(float a, string b)
 
-    public async void LoadAllFromAssetBundle<T>(string label, System.Action actionForEachLoad) where T : Object
+    public async Task LoadAllFromAssetBundle<T>(string label, System.Action actionForEachLoad) where T : Object
     {   
         //람다 함수 (매개변수) => {내용}
         var finder = Addressables.LoadAssetsAsync<T>(label, (T loaded) =>
@@ -164,9 +169,13 @@ public class DataManager : ManagerBase
             SaveDataFile(loaded);
             actionForEachLoad();
         });
-        await finder.Task;
+
+        Task result = finder.Task;
+        await result;
         finder.Release();
     }
+
+    
 
     public async void LoadFileFromAssetBundle<T>(string address) where T : Object
     {
