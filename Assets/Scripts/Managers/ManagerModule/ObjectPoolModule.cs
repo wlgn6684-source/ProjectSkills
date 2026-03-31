@@ -21,10 +21,8 @@ public class ObjectPoolModule
     public void Initialize()
     {
         rootTransform = new GameObject(Setting.poolName).transform;
-        for (int i = 0; i < _setting.countInitial; i++)
-        {
-            PrepareObject(); 
-        }
+        Setting.target?.TryAddComponent<PooledObject>();
+        PrepareObjects(Setting.countInitial);
 
     }
 
@@ -32,30 +30,94 @@ public class ObjectPoolModule
     {
         if (!Setting.target) return null;
         GameObject result = ObjectManager.CreateObject(Setting.target, rootTransform);
+        EnqueueObject(result);
+        return result;
+    }
+    
+    //uint 마이너스가 존재하면 안됨
+    //unsigned 부호없는
+    void PrepareObjects(uint count)
+    {
+        if (!Setting.target) return;
+        for (int i = 0; i < count; i++)
+        {
+            GameObject result = CreateFromPrefab();
+            EnqueueObject(result);
+
+        }
+    }
+
+    void PrepareObjects(uint count, out GameObject activeObject)
+    {
+        if (!Setting.target) 
+        {   
+            activeObject = null;
+            return;
+        }
+
+        activeObject = CreateFromPrefab();
+
+        for (int i = 1; i < count; i++)
+        {
+            GameObject result = CreateFromPrefab();
+            EnqueueObject(result);
+        }
+    }
+
+    public GameObject CreateFromPrefab()
+    {
+        GameObject result = ObjectManager.CreateObject(Setting.target, rootTransform);
         if (result)
         { 
-            result.SetActive(false);
-
             result.name = Setting.poolName;
-            prepareQueue.Enqueue(result);
-
+            if (result.TryGetComponent(out PooledObject pool ))
+            {
+                pool.OnEnqueueEvent -= DestroyObject;
+                pool.OnEnqueueEvent += DestroyObject;
+            }
         }
         return result;
     }
-    public GameObject CreateObject()
+    public GameObject CreateObject(Transform parent = null)
     {
         GameObject result;
         if (!prepareQueue.TryDequeue(out result))
         {
-            PrepareObject();
+            PrepareObjects(Setting.countAdditional, out result);
+        }
+
+        if (result)
+        {
+            if (result.TryGetComponent(out PooledObject pool))
+            {
+                pool.OnDequeue();
+            }
+            result.transform.SetParent(parent);
+            result.SetActive(true);
         }
 
         return result;
     }
 
     public void DestroyObject(GameObject target)
-    { 
-        
+    {
+        EnqueueObject(target);
+        if (target)
+        { 
+            target.transform.SetParent(rootTransform);
+        }
+    }
+
+    public void EnqueueObject(GameObject target)
+    {
+        if (!target) return;
+        {
+            target.SetActive(false);
+
+            target.name = Setting.poolName;
+            prepareQueue.Enqueue(target);
+
+        }
     }
 }
  

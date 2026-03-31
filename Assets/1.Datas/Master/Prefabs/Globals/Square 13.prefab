@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 505947009371308392}
   - component: {fileID: 2614699084203335227}
   - component: {fileID: -4920208319779649649}
+  - component: {fileID: -8566198647730236666}
   m_Layer: 0
   m_Name: Square 13
   m_TagString: Untagged
@@ -138,3 +139,15 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-8566198647730236666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4429341219341135667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: debe50f3278ded44aa464634978c7322, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PooledObject

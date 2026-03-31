@@ -26,7 +26,7 @@ public class MouseFollower : MonoBehaviour, IFunctionable
 
     void CreateToMouse(Vector2 screenPosition, Vector3 worldPosition)
     {
-        GameObject inst = ObjectManager.CreateObject(DataManager.LoadDataFile<GameObject>("Square 13"));
+        GameObject inst = ObjectManager.CreateObject("SealThirtin");
         inst.transform.position = worldPosition;
     }
 
