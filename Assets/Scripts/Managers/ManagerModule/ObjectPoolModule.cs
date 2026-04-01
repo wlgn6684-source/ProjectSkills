@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ObjectPoolModule
 {
@@ -85,6 +86,7 @@ public class ObjectPoolModule
         {
             PrepareObjects(Setting.countAdditional, out result);
         }
+        result.SetActive(true);
 
         if (result)
         {
@@ -92,8 +94,53 @@ public class ObjectPoolModule
             {
                 pool.OnDequeue();
             }
-            result.transform.SetParent(parent);
-            result.SetActive(true);
+            Transform currentTransform = result.transform;
+            Transform originTracsform = Setting.target.transform;
+            currentTransform.SetParent(parent);
+            if(currentTransform is RectTransform asRectTransform 
+                && originTracsform is RectTransform originRectTransform)
+            { 
+                asRectTransform.anchorMin = originRectTransform.anchorMin;
+                asRectTransform.anchorMax = originRectTransform.anchorMax;
+
+
+                asRectTransform.pivot = originRectTransform.pivot;
+
+                if (parent)
+                {
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(parent.transform as RectTransform);
+                }
+                bool strechX = asRectTransform.anchorMin.x != asRectTransform.anchorMax.x;
+                bool strechY = asRectTransform.anchorMin.y != asRectTransform.anchorMax.y;
+                if (strechX || strechY)
+                {   
+                    asRectTransform.offsetMax = originRectTransform.offsetMax;
+                    asRectTransform.offsetMin = originRectTransform.offsetMin;
+                    //if (strechX)
+                    //{
+                        //asRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, originRectTransform.offsetMin.x, 0);
+                        //asRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, -originRectTransform.offsetMax.x, 0);
+                    //}
+                    //if (strechY)
+                    //{
+                        //asRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, originRectTransform.offsetMin.y, 0);
+                        //asRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, -originRectTransform.offsetMax.y, 0);
+                    //}
+                }
+                else
+                {
+                    asRectTransform.anchoredPosition = originRectTransform.anchoredPosition;
+                    asRectTransform.sizeDelta = originRectTransform.sizeDelta;
+                }
+                
+            }
+            else 
+            {
+                currentTransform.localPosition = originTracsform.localPosition;
+            }
+            currentTransform.localPosition = originTracsform.localPosition;
+            currentTransform.localScale = originTracsform.localScale;
+                        
         }
 
         return result;

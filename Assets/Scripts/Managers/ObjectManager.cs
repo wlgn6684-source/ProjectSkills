@@ -41,6 +41,8 @@ public class ObjectManager : ManagerBase
     {
         GameObject result =null;
 
+        wantName = wantName.ToLower();
+
         if (poolDictionary.TryGetValue(wantName, out ObjectPoolModule pool))
         {
             result = pool.CreateObject(parent);
@@ -311,13 +313,15 @@ public class ObjectManager : ManagerBase
     }
 
     public void RegistrationPool(string poolName)
-    {
+    {   
+        poolName = poolName.ToLower();
         PoolRequest currentRequest = DataManager.LoadDataFile<PoolRequest>(poolName);
         if (currentRequest == null) return;
+        if (currentRequest.settings == null) return;
         loadedPoolRequests.Add(currentRequest);
         foreach (PoolSetting currentSetting in currentRequest.settings)
         {
-            string currentName = currentSetting.poolName;
+            string currentName = currentSetting.poolName.ToLower();
             GameObject currentPrefab = currentSetting.target;
             if (currentPrefab == null) continue;
             if (poolDictionary.ContainsKey(currentName)) continue;

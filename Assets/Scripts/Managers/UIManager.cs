@@ -4,25 +4,46 @@ using UnityEngine;
 
 public enum UIType
 { 
-    None, Loading, Title, _Length
+    None, Loading, Title, _Length, Movable
 }
 
+public delegate void PopUpEvent(string title, string context, string confirm);
+
 public class UIManager : ManagerBase
-{
+{   
+    public static event PopUpEvent OnPopUp;
+
     Canvas _mainCanvas;
     public Canvas MainCanvas => _mainCanvas;
 
     Dictionary<UIType, UIBase> uiDictionary = new();
-    protected override IEnumerator OnConnected(GameManager newManager)
+    public IEnumerator Initialize(GameManager newManager)
     {
         _mainCanvas = GetComponentInChildren<Canvas>();
         //GameObject.FindGameObjectsWithTag("MainCanvas");
         SetUI(UIType.Loading, GetComponentInChildren<UI_LoadingScreen>());
         yield return null;
     }
+
+    protected override IEnumerator OnConnected(GameManager newManager)
+    {
+        UIBase movableUI = CreateUI(UIType.Movable, "MovableScreen");
+        yield return null;
+        movableUI.SetChild(ObjectManager.CreateObject("PopUp"));
+        yield return null;
+    }
     protected override void OnDisconnected()
     {
 
+    }
+
+    protected UIBase CreateUI(UIType wantType, string wantName)
+    {
+        GameObject instance = ObjectManager.CreateObject(wantName, _mainCanvas.transform);
+        UIBase result = instance?.GetComponent<UIBase>();
+       
+        return SetUI(wantType, result);
+        
     }
 
     protected UIBase SetUI(UIType wantType, UIBase wantUI)
@@ -73,4 +94,14 @@ public class UIManager : ManagerBase
         return result;
     }
     public static UIBase ClaimToggleUI(UIType wantType) => GameManager.Instance?.UI?.ToggleUI(wantType);
+
+    public static void ClaimPopup(string title, string context, string confirm)
+    { 
+        OnPopUp?.Invoke(title, context, confirm);
+    }
+
+    public static void ClaimErrorMessage(string title, string context, string confirm)
+    {
+        OnPopUp?.Invoke("Error", context, "confirm");
+    }
 }

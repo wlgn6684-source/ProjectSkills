@@ -12,3 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f172d287297ace545869594516361da5, type: 3}
   m_Name: GlobalUIPool
   m_EditorClassIdentifier: Assembly-CSharp::PoolRequest
+  settings:
+  - poolName: PopUp
+    target: {fileID: 235284289577362813, guid: 2a93d50c08b56dd40aa607a9ba6f5771, type: 3}
+    countInitial: 1
+    countAdditional: 2
