@@ -51,10 +51,14 @@ public class ObjectManager : ManagerBase
         else 
         {
             //데이터에 있는지 확인
-            GameObject prefab = DataManager.LoadDataFile<GameObject>(wantName);
-            if (prefab) result = Instantiate(prefab, parent);
+            if (DataManager.TryLoadDataFile<GameObject>(wantName, out GameObject prefab))
+            {
+                if (prefab) result = Instantiate(prefab, parent);
+            }
             
         }
+
+        if (!result) UIManager.ClaimErrorMessage(SystemMessage.ObjectNameNotFound(wantName));
 
         RegistrationObject(result);//둘중에 하나라도 하고 없으면 말고!
         return result;

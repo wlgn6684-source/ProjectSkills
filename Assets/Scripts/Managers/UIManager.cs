@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum UIType
 { 
@@ -16,11 +17,14 @@ public class UIManager : ManagerBase
     Canvas _mainCanvas;
     public Canvas MainCanvas => _mainCanvas;
 
+    GraphicRaycaster _raycaster;
+    public GraphicRaycaster Raycaster => _raycaster;
+
     Dictionary<UIType, UIBase> uiDictionary = new();
     public IEnumerator Initialize(GameManager newManager)
     {
-        _mainCanvas = GetComponentInChildren<Canvas>();
         //GameObject.FindGameObjectsWithTag("MainCanvas");
+        SetMainCanvas(GetComponentInChildren<Canvas>());
         SetUI(UIType.Loading, GetComponentInChildren<UI_LoadingScreen>());
         yield return null;
     }
@@ -29,12 +33,26 @@ public class UIManager : ManagerBase
     {
         UIBase movableUI = CreateUI(UIType.Movable, "MovableScreen");
         yield return null;
-        movableUI.SetChild(ObjectManager.CreateObject("PopUp"));
-        yield return null;
+        
+       
     }
     protected override void OnDisconnected()
     {
+        UnSetAllUI();
+    }
 
+    protected void SetMainCanvas(Canvas newCanvas)
+    {
+        _mainCanvas = newCanvas;
+        if (_mainCanvas)
+        {
+            _raycaster = _mainCanvas.GetComponent<GraphicRaycaster>();
+        }
+        else 
+        {
+            _raycaster = null;
+        }
+            
     }
 
     protected UIBase CreateUI(UIType wantType, string wantName)
@@ -46,15 +64,49 @@ public class UIManager : ManagerBase
         
     }
 
+    
+    protected void UnSetUI(UIType wantType)
+    {
+        if (uiDictionary.TryGetValue(wantType, out UIBase found))
+        {
+            UnSetUI(found);
+            uiDictionary.Remove(wantType);
+        }
+    }
+    protected void UnSetUI(UIBase wantUI)
+    { 
+        if(!wantUI) return;
+
+        wantUI.UnRegistration(this);
+    }
+
+    public static void ClaimUnsetUI(UIBase wantUI) => GameManager.Instance?.UI?.UnSetUI(wantUI);
+    public static void ClaimUnsetUI(GameObject wantObject) => ClaimUnsetUI(wantObject?.GetComponent<UIBase>());
+
+    protected void UnSetAllUI()
+    {
+        foreach (UIBase ui in uiDictionary.Values)
+        {
+            UnSetUI(ui);
+        }
+        uiDictionary.Clear();
+    }
+
+    public static UIBase ClaimSetUI(UIBase wantUI) => GameManager.Instance?.UI?.SetUI(wantUI);
+    public static UIBase ClaimSetUI(GameObject wantObject) => ClaimSetUI(wantObject?.GetComponent<UIBase>());
+    protected UIBase SetUI(UIBase wantUI)
+    {
+        wantUI.Registration(this);
+        return wantUI;
+    }
     protected UIBase SetUI(UIType wantType, UIBase wantUI)
     {
         //InventoryType, InventoryInstance
         if (wantUI == null) return null;
         if(uiDictionary.TryGetValue(wantType, out UIBase origin)) return origin;
         uiDictionary.Add(wantType, wantUI);
-        return wantUI;
+        return SetUI(wantUI);
     }
-    public static UIBase ClaimSetUI(UIType wantType, UIBase wantUI) => GameManager.Instance?.UI?.SetUI(wantType, wantUI);
 
     protected UIBase GetUI(UIType wantType)
     { 
@@ -100,7 +152,7 @@ public class UIManager : ManagerBase
         OnPopUp?.Invoke(title, context, confirm);
     }
 
-    public static void ClaimErrorMessage(string title, string context, string confirm)
+    public static void ClaimErrorMessage(string context)
     {
         OnPopUp?.Invoke("Error", context, "confirm");
     }

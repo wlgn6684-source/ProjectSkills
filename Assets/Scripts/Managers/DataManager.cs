@@ -122,7 +122,7 @@ public class DataManager : ManagerBase
     
     
 
-    public static void SaveDataFile<T>(T target) where T : Object
+    public static void SaveDataFile<T>(T target)  where T : Object
     {
         if (target == null) return;
         Dictionary<string, Object> innerDictionary; 
@@ -135,18 +135,36 @@ public class DataManager : ManagerBase
         
     }
 
-    public static T LoadDataFile<T>(string fileName) where T : Object
+    protected static T GetDataFromDictionary<T>(string fileName) where T : Object
     {
+        //1. 글자가 없을 때 fileName is null      nullString
+        //2. 글자가 없을 때 fileName.length == 0 emptyString
+        if (string.IsNullOrEmpty(fileName)) return null;
+
         fileName = fileName.ToLower();
         if (dataDictionary.TryGetValue(typeof(T), out Dictionary<string, Object> innerDictionary))
         {
             if (innerDictionary.TryGetValue(fileName, out Object result))
-            { 
+            {
                 return result as T;
             }
         }
-
         return null;
+    }
+
+
+    public static T LoadDataFile<T>(string fileName) where T : Object
+    {
+        T result = GetDataFromDictionary<T>(fileName);
+        if(!result)UIManager.ClaimErrorMessage(SystemMessage.FileNameNotFound(fileName));
+
+        return result;
+    }
+
+    public static bool TryLoadDataFile<T>(string fileName, out T result) where T : Object
+    { 
+        result = GetDataFromDictionary<T>(fileName);
+        return result;
     }
 
     // Action => 행동
