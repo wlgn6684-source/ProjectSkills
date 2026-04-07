@@ -13,15 +13,14 @@ public class MouseFollower : MonoBehaviour, IFunctionable
     }
     public void RegistrationFunctions()
     {
-        InputManager.OnMouseLeftUp += CreateToMouse;
-        InputManager.OnMouseRightDown += DestroyToMouse;
+        InputManager.OnCancelButton += (value) => UIManager.ClaimPopup("인식 오류", "ㅇㅇ", "ㅇㅇ");
         
     }
     public void UnregistrationFunctions()
     {
-        InputManager.OnMouseLeftUp -= CreateToMouse;
-        InputManager.OnMouseRightDown -= DestroyToMouse;
-        
+
+        InputManager.OnCancelButton -= (value) => UIManager.ClaimPopup("인식 오류", "ㅇㅇ", "ㅇㅇ");
+
     }
 
     void CreateToMouse(Vector2 screenPosition, Vector3 worldPosition)

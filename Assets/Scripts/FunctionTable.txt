@@ -1,0 +1,61 @@
+게임 매니저 인스턴스
+GameManager.Instance
+GameManager.Instance.Input
+
+일시정지/해제
+GameManager.Pause()
+GameManager.Unpause()
+
+GameManager.OnInitializeManager += 함수
+GameManager.OnInitializeController += 함수
+GameManager.OnInitializeCharacter += 함수
+GameManager.OnInitializeObject += 함수
+
+GameManager.OnUpdateManager += 함수
+GameManager.OnUpdateController += 함수
+GameManager.OnUpdateCharater += 함수
+GameManager.OnUpdateObject += 함수
+
+GameManager.OnDestroyManager += 함수
+GameManager.OnDestroyController += 함수
+GameManager.OnDestroyCharater += 함수
+GameManager.OnDestroyObject += 함수
+
+파일을 가져올때
+DataManager.LoadDataFile<T>(이름)
+DataManager.TryLoadDataFile<T>(이름, out 파일 받아갈 변수)
+
+게임 중간에 로딩을 추가로 해야 할 때 => 초반에 로딩이 너무 길다
+DataManager.LoadAllFromAssetBundle<T>
+
+ClaimGetUI(타입)
+열고싶다
+ClaimOpenUI(타입)
+닫고싶다
+ClaimCloseUI(타입)
+여닫고싶다
+ClaimToggleUI(타입)
+팝업창이 열렸으면 한다
+ClaimPopup(제목, 내용, 확인)
+에러창이 열렸으면 한다
+ClaimErrorMessage(내용)
+
+이름만 쓰면 그 이름에 해당하는 오브젝트를 만들어준다.
+ObjectManager.CreateObject(대상)
+대상을 파괴하는데 + 풀이면 풀에 넣음
+ObjectManager.DestroyObject(대상)
+
+게임하는 중간에 로딩이 되어서 새로운 풀이 필요하게된 경우
+ObjectManager.RegistrationPool(dlfma)
+
+GameManager.Instance.Camera.SetMainCamera : 이 카메라를 집중
+GameManager.Instance.Camera.GetRaycastResult2D : 2D화면이 가리키는 대상 가져오기
+GameManager.Instance.Camera.GetRaycastResult3D : 3D화면이 가리키는 대상 가져오기
+
+InputManager.OnMouseLeftDown	+= 입력받으면 할 일
+InputManager.OnMouseRightDown	+= 입력받으면 할 일
+InputManager.OnMouseLeftUp		+= 입력받으면 할 일
+InputManager.OnMouseRightUp		+= 입력받으면 할 일
+InputManager.OnMouseMove		+= 입력받으면 할 일
+
+GameManager.Instance.Input.GetGameObjectUnderCursor()

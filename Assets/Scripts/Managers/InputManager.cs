@@ -1,18 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.Rendering.LookDev;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
+
 //          
 //       대리자 => 기능을 전달 위임
 // 플레이어가 할 일 대리 뛰어주고, 열려있는 창이 있다면 그 친구의 기능도 수행하고 간다!
-public delegate void MouseDownEvent(Vector2 position, Vector3 worldPosition);
-public delegate void MouseUpEvent(Vector2 position, Vector3 worldPosition);
+public delegate void MouseButtonEvent(bool value, Vector2 position, Vector3 worldPosition);
 public delegate void MouseMoveEvent(Vector2 screenPosition, Vector3 worldPosition);
+public delegate void ButtonEvent(bool value);
+public delegate void VectorEvent(Vector2 value);
+public delegate void AxisEvent(Vector2 value);
 
 
 //대상 변수나 클래스 위쪽에 []에 내용을 넣는 것을 Attribute : 속성이라고 한다.
@@ -20,11 +22,20 @@ public delegate void MouseMoveEvent(Vector2 screenPosition, Vector3 worldPositio
 
 public class InputManager : ManagerBase
 {
-    public static event MouseDownEvent OnMouseLeftDown;
-    public static event MouseDownEvent OnMouseRightDown;
-    public static event MouseUpEvent OnMouseLeftUp;    
-    public static event MouseUpEvent OnMouseRightUp;        
-    public static event MouseMoveEvent OnMouseMove;    
+    public static event MouseButtonEvent OnMouseLeftButton;
+    public static event MouseButtonEvent OnMouseRightButton;
+       
+    public static event MouseMoveEvent   OnMouseMove;    
+    public static event ButtonEvent      OnMovementButton;    
+    public static event ButtonEvent      OnInteractionButton;    
+    public static event ButtonEvent      OnRunningButton;    
+    public static event ButtonEvent      OnInsensiblyButton;    
+    public static event ButtonEvent      OnTiltButton;    
+    public static event ButtonEvent      OnMapButton;    
+    public static event ButtonEvent      OnInventoryButton;    
+    public static event ButtonEvent      OnCancelButton;  
+    
+    public static event VectorEvent OnMove;
     
     
     PlayerInput targetInput;
@@ -90,11 +101,31 @@ public class InputManager : ManagerBase
     void InitializeAllActions()
     {
         if(actionDictionary == null || actionDictionary.Count == 0) return;
-        InitializeAction ("CursorPositionChanged", CursorPositionChanged);
-        InitializeAction ("MouseRightButtonUp",   (context) => OnMouseRightUp?.Invoke(cursorScreenPosition, cursorWorldPosition));
-        InitializeAction ("MouseLeftButtonUp",    (context) => OnMouseLeftUp?.Invoke(cursorScreenPosition, cursorWorldPosition));
-        InitializeAction ("MouseRightButtonDown", (context) => OnMouseRightDown?.Invoke(cursorScreenPosition, cursorWorldPosition));
-        InitializeAction ("MouseLeftButtonDown",  (context) => OnMouseLeftDown?.Invoke(cursorScreenPosition, cursorWorldPosition));
+        InitializeAction ("CursorPositionChanged",     (context) => CursorPositionChanged(GetVector2Value(context)));
+        InitializeAction ("Move",                      (context) => OnMove                  ?.Invoke(GetVector2Value(context)));
+
+        InitializeAction ("MouseLeftButtonDown",           (context) => OnMouseLeftButton       ?.Invoke(true, cursorScreenPosition, cursorWorldPosition));
+        InitializeAction ("MouseRightButtonDown",          (context) => OnMouseRightButton      ?.Invoke(true, cursorScreenPosition, cursorWorldPosition));
+        InitializeAction ("MouseLeftButtonUp",           (context) => OnMouseLeftButton       ?.Invoke(false, cursorScreenPosition, cursorWorldPosition));
+        InitializeAction ("MouseRightButtonUp",          (context) => OnMouseRightButton      ?.Invoke(false, cursorScreenPosition, cursorWorldPosition));
+
+        InitializeAction("MovementDown",         (context) => OnMovementButton        ?.Invoke(true));
+        InitializeAction("MovementUp",           (context) => OnMovementButton        ?.Invoke(false));
+        InitializeAction("InteractionDown",      (context) => OnInteractionButton     ?.Invoke(true));
+        InitializeAction("InteractionUp",        (context) => OnInteractionButton     ?.Invoke(false));
+        InitializeAction("RunningDown",          (context) => OnRunningButton         ?.Invoke(true));
+        InitializeAction("RunningUp",            (context) => OnRunningButton         ?.Invoke(false));
+        InitializeAction("InsensiblyDown",       (context) => OnInsensiblyButton      ?.Invoke(true));
+        InitializeAction("InsensiblyUp",         (context) => OnInsensiblyButton      ?.Invoke(false));
+        InitializeAction("TiltDown",             (context) => OnTiltButton            ?.Invoke(true));
+        InitializeAction("TiltUp",               (context) => OnTiltButton            ?.Invoke(false));
+        InitializeAction("MapDown",              (context) => OnMapButton             ?.Invoke(true));
+        InitializeAction("MapUp",                (context) => OnMapButton             ?.Invoke(false));
+        InitializeAction("TapDown",              (context) => OnInventoryButton       ?.Invoke(true));
+        InitializeAction("TapUp",                (context) => OnInventoryButton       ?.Invoke(false));
+        InitializeAction("Cancel",           (context) => OnCancelButton          ?.Invoke(true));
+        
+
     }
 
     
@@ -108,7 +139,15 @@ public class InputManager : ManagerBase
         }
     }
 
-    void CursorPositionChanged(InputAction.CallbackContext context)
+    T GetInputValue<T>(InputAction.CallbackContext context) where T : struct
+    {
+        if (context.valueType != typeof(T)) return default;
+        return context.ReadValue<T>();
+    }
+    Vector2 GetVector2Value(InputAction.CallbackContext context) => GetInputValue<Vector2>(context);
+
+    void CursorPositionChanged(Vector2 screenPosition)
+    //
     {
         Camera mainCamera = Camera.main;
         Physics2DRaycaster raycaster2D = mainCamera.GetComponent<Physics2DRaycaster>();
@@ -117,7 +156,7 @@ public class InputManager : ManagerBase
        
 
         //마우스의 화면상 실제 픽셀위치
-        Vector2 screenPosition = context.ReadValue<Vector2>();
+        //Vector2 screenPosition = context.ReadValue<Vector2>();
         //화면상 x축으로 1픽셀
         //유니티에서 1칸은 1m
         //카메라를 기준으로 세상을 본다

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+
 
 public enum UIType
 { 
@@ -21,6 +24,12 @@ public class UIManager : ManagerBase
     public GraphicRaycaster Raycaster => _raycaster;
 
     Dictionary<UIType, UIBase> uiDictionary = new();
+
+    Rect _uiBoundary;
+    public static Rect UIBoundary => GameManager.Instance?.UI?._uiBoundary ?? Rect.zero;
+
+    float _uiScale = 1.0f;
+    public static float UIScale => GameManager.Instance?.UI?._uiScale ?? 1.0f;
     public IEnumerator Initialize(GameManager newManager)
     {
         //GameObject.FindGameObjectsWithTag("MainCanvas");
@@ -47,6 +56,13 @@ public class UIManager : ManagerBase
         if (_mainCanvas)
         {
             _raycaster = _mainCanvas.GetComponent<GraphicRaycaster>();
+            //RectTransform mainRect = MainCanvas.GetComponent<RectTransform>();
+            if (_mainCanvas.transform is RectTransform mainRectTransform)
+            {
+                _uiScale = mainRectTransform.lossyScale.x;
+                _uiBoundary = mainRectTransform.rect;
+            }
+           
         }
         else 
         {

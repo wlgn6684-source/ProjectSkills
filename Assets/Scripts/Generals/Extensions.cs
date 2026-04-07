@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Threading.Tasks;
+using Unity.Mathematics.Geometry;
 using UnityEngine;
 
 //확장 메소드들을 가지고 있을 친구들
@@ -48,5 +49,68 @@ public static class Extensions
     {
         yield return new WaitUntil(() => targetTask.IsCompleted);
         targetTask.Dispose();
+    }
+
+    public static float GetPenetratedDistance(float aHalf, float bHalf, float aPos, float bPos)
+    {
+       
+        
+            float absAHalf = Mathf.Abs(aHalf);
+            float absBHalf = Mathf.Abs(bHalf);
+
+            float minSpace = absAHalf + absBHalf;
+            float distance = aPos - bPos;
+            float penetration = minSpace - Mathf.Abs(distance);
+
+            penetration *= Mathf.Sign(distance);
+            return penetration;
+
+        
+    }
+
+    public static Vector2 AABB(this Rect A, Rect B)
+    {   
+        Vector2 result = Vector2.zero;
+        Vector2 aMin = A.min;
+        Vector2 aMax = A.max;
+        Vector2 aHalf = A.size * .5f;
+        Vector2 bMin = B.min;
+        Vector2 bMax = B.max;
+        Vector2 bHalf = B.size * .5f;
+
+        if (aMax.x > bMin.x && bMax.x > aMin.x)
+        {
+            result.x =  GetPenetratedDistance(aHalf.x, bHalf.x, A.position.x, B.position.x);
+        }
+        
+        if (aMax.y > bMin.y && bMax.y > aMin.y)
+        {
+            result.y =  GetPenetratedDistance(aHalf.y, bHalf.y, A.position.y, B.position.y);
+        }
+
+        return result;
+    }
+
+    public static float GetOutBoundDistance(float inMin, float outMin, float inMax, float outMax)
+    { 
+        float result = 0.0f;
+
+        bool leftOut = inMin < outMin;
+        bool rightOut = inMax > outMax;
+
+        if (leftOut ^ rightOut)
+        { 
+            if(leftOut) result = outMin - inMin; 
+            if(rightOut) result = outMax - inMax;
+        }
+        
+        return result;
+    }
+    public static Vector2 InversedAABB(this Rect target, Rect bound)
+    {
+        Vector2 result;
+        result.x = GetOutBoundDistance(target.xMin, bound.xMin, target.xMax, bound.xMax);
+        result.y = GetOutBoundDistance(target.yMin, bound.yMin, target.yMax, bound.yMax);
+        return result;
     }
 }
