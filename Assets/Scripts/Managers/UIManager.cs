@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 public enum UIType
 { 
-    None, Loading, Title, _Length, Movable
+    None, Loading, Title, _Length, Movable, Menu, Info
 }
 
 public delegate void PopUpEvent(string title, string context, string confirm);
@@ -61,6 +61,8 @@ public class UIManager : ManagerBase
             {
                 _uiScale = mainRectTransform.lossyScale.x;
                 _uiBoundary = mainRectTransform.rect;
+                //_uiBoundary.size *= _uiScale;
+                //_uiBoundary.position *= _uiBoundary.size / 1.0f;
             }
            
         }
@@ -71,6 +73,7 @@ public class UIManager : ManagerBase
             
     }
 
+    
     protected UIBase CreateUI(UIType wantType, string wantName)
     {
         GameObject instance = ObjectManager.CreateObject(wantName, _mainCanvas.transform);
@@ -80,7 +83,7 @@ public class UIManager : ManagerBase
         
     }
 
-    
+    public static UIBase ClaimCreateUI(UIType wantType, string wantName) => GameManager.Instance.UI?.CreateUI(wantType, wantName);
     protected void UnSetUI(UIType wantType)
     {
         if (uiDictionary.TryGetValue(wantType, out UIBase found))
