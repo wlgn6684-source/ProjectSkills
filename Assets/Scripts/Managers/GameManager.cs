@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
 
 
         yield return UI.Initialize(this);
-        UIBase loadingUI = UIManager.ClaimOpenUI(UIType.Loading);
+        UIBase loadingUI = UIManager.ClaimOpenScreen(UIType.Loading);
         IProgress<int> loadingProgress = loadingUI as IProgress<int>;
 
         loadingProgress?.Set(0, totalLoadCount);
@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour
         loadingProgress?.AddCurrent(1);
         yield return new WaitForSeconds(1.0f);
 
-        UIManager.ClaimCloseUI(UIType.Loading);
+        UIManager.ClaimOpenScreen(UIType.Title );
         isLoading = false;
 
     }
