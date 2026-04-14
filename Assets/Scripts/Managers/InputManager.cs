@@ -123,7 +123,7 @@ public class InputManager : ManagerBase
         InitializeAction("MapUp",                (context) => OnMapButton             ?.Invoke(false));
         InitializeAction("TapDown",              (context) => OnInventoryButton       ?.Invoke(true));
         InitializeAction("TapUp",                (context) => OnInventoryButton       ?.Invoke(false));
-        InitializeAction("Cancel",           (context) => OnCancelButton          ?.Invoke(true));
+        InitializeAction("Cancel",               (context) => OnCancelButton          ?.Invoke(true));
         
 
     }

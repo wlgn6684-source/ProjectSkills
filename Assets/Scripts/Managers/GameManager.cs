@@ -188,6 +188,17 @@ public class GameManager : MonoBehaviour
         return targetVarirable;
     }
 
+
+    public static void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else 
+        Application.Quit();
+#endif
+
+    }
+
     public static void Pause()
     {
         Instance.isPlaying = false;

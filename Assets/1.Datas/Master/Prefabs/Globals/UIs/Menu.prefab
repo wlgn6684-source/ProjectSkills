@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 2872105690863930582}
   - component: {fileID: 4051684541905528771}
   - component: {fileID: 5671541336108842145}
+  - component: {fileID: 6375292662474472464}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -156,10 +157,10 @@ RectTransform:
   - {fileID: 7665665605040930790}
   - {fileID: 1958400871839939044}
   - {fileID: 7312712099215469326}
-  - {fileID: 5240578375024778046}
   - {fileID: 4452349641880409875}
   - {fileID: 6390381175678169657}
   - {fileID: 803310916056379465}
+  - {fileID: 5240578375024778046}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -229,6 +230,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a127900e947490489e73b9250473106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_MenuWindow
+--- !u!114 &6375292662474472464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 264171911443057861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8adf5732604e5a8418247e8a0361dbbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_Button_OpenUI
+  wantType: 8
+  wantToggle: 0
 --- !u!1 &728194931495062536
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,7 +877,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5454423789518554206}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -956,7 +971,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5563885623533710605}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6375292662474472464}
+        m_TargetAssemblyTypeName: UI_Button_OpenUI, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5976456739655529304
 GameObject:
   m_ObjectHideFlags: 0
@@ -1214,7 +1241,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4951901125361929821}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5671541336108842145}
+        m_TargetAssemblyTypeName: UI_MenuWindow, Assembly-CSharp
+        m_MethodName: Close
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7312295715767636855
 GameObject:
   m_ObjectHideFlags: 0

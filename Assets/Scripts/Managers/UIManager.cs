@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 public enum UIType
 { 
-    None, Loading, Title, _Length, Movable, Menu, Lobby
+    None, Loading, Title, _Length, Movable, Menu, Lobby, Map, GameQuit, Profile, Ranking, Passive, Quest, Inventory, Equipment, Market, Customize
 }
 
 public delegate void PopUpEvent(string title, string context, string confirm);
@@ -21,6 +21,8 @@ public class UIManager : ManagerBase
     public Canvas MainCanvas => _mainCanvas;
 
     UIBase _movableScreen;
+    RectTransform switcherTransform;
+    RectTransform createdTransform;
 
     GraphicRaycaster _raycaster;
     public GraphicRaycaster Raycaster => _raycaster;
@@ -43,29 +45,54 @@ public class UIManager : ManagerBase
         yield return null;
     }
 
+    public RectTransform CreateFullScreen(string wantName)
+    {
+        
+        GameObject Instance = new GameObject(wantName);
+        RectTransform result = Instance.AddComponent<RectTransform>();
+        result.SetParent(MainCanvas.transform);
+        result.SetAsFirstSibling();
+        result.anchorMin = Vector3.zero;
+        result.anchorMax = Vector3.one;
+        result.offsetMin = Vector3.zero;
+        result.offsetMax = Vector3.zero;
+        result.localScale = Vector3.one;
+        return result;
+     
+
+    }
+
     protected override IEnumerator OnConnected(GameManager newManager)
     {
-        _movableScreen = CreateUI(UIType.Movable, "MovableScreen");
-        GameObject screenSwitcher = new GameObject("ScreenSwitcher");
-        RectTransform switcherTransform = screenSwitcher.AddComponent<RectTransform>();
-        switcherTransform.SetParent(MainCanvas.transform);
-        switcherTransform.SetAsFirstSibling();
-        switcherTransform.anchorMin = Vector3.zero;
-        switcherTransform.anchorMax = Vector3.one;
-        switcherTransform.offsetMin = Vector3.zero;
-        switcherTransform.offsetMax = Vector3.zero;
-        switcherTransform.localScale = Vector3.one;
-        CreateUI(UIType.Title, "TitleScreen", switcherTransform);
-        CreateUI(UIType.Lobby, "LobbyScreen", switcherTransform);
+        createdTransform = CreateFullScreen("CreatedUI");
+        _movableScreen = CreateUI(UIType.Movable, "MovableScreen", MainCanvas?.transform);
+        switcherTransform = CreateFullScreen("ScreenSwitcher");
+        CreateUI(UIType.Title, "TitleScreen",   switcherTransform);
+        CreateUI(UIType.Lobby, "LobbyScreen",   switcherTransform);
+        CreateUI(UIType.Map,   "MapScreen",     switcherTransform);
+
 
         foreach (Transform currentTransform in switcherTransform)
         { 
             currentTransform.gameObject.SetActive(false);
         }
 
+        RectTransform changerTransform = CreateFullScreen("ScreenChanger");
+        changerTransform.SetAsLastSibling();
+
+        GameObject instance = ObjectManager.CreateObject("ScreenChanger", changerTransform);
+        if (instance.TryGetComponent(out UI_ScreenChanger asChanger))
+        { 
+            asChanger.ChangeStart();
+            yield return new WaitForSeconds(3);
+            asChanger.ChangeEnd();
+        }
+
         yield return null; 
        
     }
+
+    
     protected override void OnDisconnected()
     {
         UnSetAllUI();
@@ -106,7 +133,7 @@ public class UIManager : ManagerBase
 
     protected UIBase CreateUI(UIType wantType, string wantName)
     { 
-       UIBase result = CreateUI(wantType, wantName, MainCanvas?.transform);
+       UIBase result = CreateUI(wantType, wantName, createdTransform ?? MainCanvas?.transform);
         if (result?.GetComponentInChildren<UI_DraggableWindow>())
         {
             _movableScreen?.SetChild(result.gameObject);
@@ -170,7 +197,7 @@ public class UIManager : ManagerBase
         //리스코프 반환 원칙
         UIBase result = GetUI(wantType);
         if (result is IOpenable asOpenable) asOpenable.Open();
-
+        if (result) EventSystem.current.SetSelectedGameObject(result.gameObject);
         //IOpenable opener = result as IOpenable;
         //if (opener != null) opener.Open();
         

@@ -1238,7 +1238,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Maket
+  m_text: Market
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fb9e6ce5678cae84d8139fbcd1d385b7, type: 2}
   m_sharedMaterial: {fileID: -5976724143012210242, guid: fb9e6ce5678cae84d8139fbcd1d385b7, type: 2}
@@ -1838,6 +1838,7 @@ GameObject:
   - component: {fileID: 4552414370722680448}
   - component: {fileID: 7774357376737347867}
   - component: {fileID: 5855011689226768826}
+  - component: {fileID: 8224510372214799724}
   m_Layer: 5
   m_Name: MapButton
   m_TagString: Untagged
@@ -1946,7 +1947,33 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7774357376737347867}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8224510372214799724}
+        m_TargetAssemblyTypeName: UI_Button_OpenUI, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8224510372214799724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5031001207060833664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8adf5732604e5a8418247e8a0361dbbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_Button_OpenUI
+  wantType: 7
+  wantToggle: 0
 --- !u!1 &5316281726378390855
 GameObject:
   m_ObjectHideFlags: 0
@@ -2218,7 +2245,7 @@ GameObject:
   - component: {fileID: 5760669352894165815}
   - component: {fileID: 7140913564370701187}
   m_Layer: 5
-  m_Name: MaketButton
+  m_Name: MarketButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
