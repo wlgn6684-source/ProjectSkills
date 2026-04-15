@@ -1323,7 +1323,7 @@ GameObject:
   - component: {fileID: 7439356399118331895}
   - component: {fileID: 6148830600229951302}
   m_Layer: 5
-  m_Name: RankingButton
+  m_Name: WorkBenchButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1346,7 +1346,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -528.9999, y: 71}
+  m_AnchoredPosition: {x: -313.99988, y: 71}
   m_SizeDelta: {x: 160.89685, y: 46.482483}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1108883802615280063
@@ -1863,7 +1863,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -337, y: 131.0456}
+  m_AnchoredPosition: {x: -122, y: 131.0456}
   m_SizeDelta: {x: 160.89685, y: 46.482483}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4552414370722680448
@@ -2268,7 +2268,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -721, y: 71}
+  m_AnchoredPosition: {x: -506, y: 71}
   m_SizeDelta: {x: 160.89685, y: 46.482483}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7721672395738320754
@@ -2555,7 +2555,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Inventory
+  m_text: Event
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fb9e6ce5678cae84d8139fbcd1d385b7, type: 2}
   m_sharedMaterial: {fileID: -5976724143012210242, guid: fb9e6ce5678cae84d8139fbcd1d385b7, type: 2}
@@ -2813,7 +2813,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ranking
+  m_text: WorkBench
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fb9e6ce5678cae84d8139fbcd1d385b7, type: 2}
   m_sharedMaterial: {fileID: -5976724143012210242, guid: fb9e6ce5678cae84d8139fbcd1d385b7, type: 2}
@@ -2921,7 +2921,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -529, y: 131.0456}
+  m_AnchoredPosition: {x: -314, y: 131.0456}
   m_SizeDelta: {x: 160.89685, y: 46.482483}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4553768341827735432
@@ -3042,7 +3042,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -147, y: 71}
+  m_AnchoredPosition: {x: -106.88, y: 714}
   m_SizeDelta: {x: 160.89685, y: 46.482483}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6213459685868144655
@@ -3163,7 +3163,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -337, y: 71}
+  m_AnchoredPosition: {x: -122, y: 71}
   m_SizeDelta: {x: 160.89685, y: 46.482483}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8523078990746019691
@@ -3261,7 +3261,7 @@ GameObject:
   - component: {fileID: 2389826880474079445}
   - component: {fileID: 5526673222069824150}
   m_Layer: 5
-  m_Name: EquipmentButton
+  m_Name: StorageButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3284,7 +3284,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -721, y: 131.0456}
+  m_AnchoredPosition: {x: -506, y: 131.0456}
   m_SizeDelta: {x: 160.89685, y: 46.482483}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4361644227647850707
@@ -3382,7 +3382,7 @@ GameObject:
   - component: {fileID: 6777977261163747485}
   - component: {fileID: 7857790745791646737}
   m_Layer: 5
-  m_Name: InventoryButton
+  m_Name: EventButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3405,7 +3405,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -147, y: 131.0456}
+  m_AnchoredPosition: {x: -106.88, y: 779}
   m_SizeDelta: {x: 160.89685, y: 46.482483}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1694262483486599855
@@ -3829,7 +3829,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Equipment
+  m_text: Storage
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fb9e6ce5678cae84d8139fbcd1d385b7, type: 2}
   m_sharedMaterial: {fileID: -5976724143012210242, guid: fb9e6ce5678cae84d8139fbcd1d385b7, type: 2}
