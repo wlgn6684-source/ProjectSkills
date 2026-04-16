@@ -139,9 +139,9 @@ public class GameManager : MonoBehaviour
         loadingProgress?.AddCurrent(1);
         yield return Input.Connect(this);
         loadingProgress?.AddCurrent(1);
-        yield return new WaitForSeconds(1.0f);
+        yield return null;
 
-        UIManager.ClaimOpenScreen(UIType.Title );
+        UIManager.ClaimOpenScreen(UIType.Title, ScreenChangeType.ScreenChanger);
         isLoading = false;
 
     }

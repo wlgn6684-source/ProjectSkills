@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: b491745ee160b434b958dcf1b33bec5a
+guid: 8e64bc24197ba72459bb7df0737cc750
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9197614001361547850
-    second: "\uB2E4\uC6B4\uB85C\uB4DC_0"
-  - first:
-      213: 2719371033298317524
-    second: "\uB2E4\uC6B4\uB85C\uB4DC_1"
+      213: 1989512020405394196
+    second: Gemini_Generated_Image_4w9ebu4w9ebu4w9e-Photoroom (1) 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -116,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\uB2E4\uC6B4\uB85C\uB4DC_0"
+      name: Gemini_Generated_Image_4w9ebu4w9ebu4w9e-Photoroom (1) 1_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 8
         y: 0
-        width: 51
-        height: 19
+        width: 1374
+        height: 768
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,30 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6bd8fabfbc28b5080800000000000000
-      internalID: -9197614001361547850
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "\uB2E4\uC6B4\uB85C\uB4DC_1"
-      rect:
-        serializedVersion: 2
-        x: 236
-        y: 0
-        width: 462
-        height: 252
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4d0bb340c852db520800000000000000
-      internalID: 2719371033298317524
+      spriteID: 41b12a444aa2c9b10800000000000000
+      internalID: 1989512020405394196
       vertices: []
       indices: 
       edges: []
@@ -173,8 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "\uB2E4\uC6B4\uB85C\uB4DC_0": -9197614001361547850
-      "\uB2E4\uC6B4\uB85C\uB4DC_1": 2719371033298317524
+      Gemini_Generated_Image_4w9ebu4w9ebu4w9e-Photoroom (1) 1_0: 1989512020405394196
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
