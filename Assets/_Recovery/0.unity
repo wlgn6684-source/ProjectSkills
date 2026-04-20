@@ -209,6 +209,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acea142c41b4ffb49ace4886334e5ed5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectManager
+--- !u!1 &155573675 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7823169091751870005, guid: 285e9b1aab4f5b247a222691d991494c, type: 3}
+  m_PrefabInstance: {fileID: 8880362419823856628}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &391374504 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7687436719487960864, guid: 285e9b1aab4f5b247a222691d991494c, type: 3}
@@ -717,6 +722,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -318.38
       objectReference: {fileID: 0}
+    - target: {fileID: 5333299061748889469, guid: 285e9b1aab4f5b247a222691d991494c, type: 3}
+      propertyPath: layoutOnLoading
+      value: 
+      objectReference: {fileID: 155573675}
+    - target: {fileID: 5333299061748889469, guid: 285e9b1aab4f5b247a222691d991494c, type: 3}
+      propertyPath: layoutOnComplete
+      value: 
+      objectReference: {fileID: 6147944391724864646, guid: 69e65bfbf5b0f494a863ad926d00c918, type: 3}
     - target: {fileID: 5722938053259423980, guid: 285e9b1aab4f5b247a222691d991494c, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

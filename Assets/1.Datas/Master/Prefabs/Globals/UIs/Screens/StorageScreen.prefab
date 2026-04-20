@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uCC3D\uACE0\uB0B4 \uC544\uC774\uD15C \uC7A5\uCC29 \uAC00\uB2A5\uC544\uC774"
+  m_text: "\uCC3D\uACE0\uB0B4 \uC544\uC774\uD15C \uC7A5\uCC29 \uAC00\uB2A5 \uC544\uC774\uD15C"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fb9e6ce5678cae84d8139fbcd1d385b7, type: 2}
   m_sharedMaterial: {fileID: -5976724143012210242, guid: fb9e6ce5678cae84d8139fbcd1d385b7, type: 2}

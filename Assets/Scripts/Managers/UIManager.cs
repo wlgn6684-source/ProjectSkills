@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 public enum UIType
 { 
-    None, Loading, Title, _Length, Movable, Menu, Lobby, Map, GameQuit, Profile, Ranking, Passive, Quest, Inventory, Equipment, Market, Customize
+    None, Loading, Title, _Length, Movable, Menu, Lobby, Map, GameQuit, Profile, Ranking, Passive, Quest, Inventory, Equipment, Market, Customize, AnyKeyScreen
 }
 
 public enum ScreenChangeType
@@ -83,6 +83,7 @@ public class UIManager : ManagerBase
         CreateUI(UIType.Title, "TitleScreen", switcherTransform);
         CreateUI(UIType.Lobby, "LobbyScreen", switcherTransform);
         CreateUI(UIType.Map, "MapScreen", switcherTransform);
+        CreateUI(UIType.AnyKeyScreen, "AnyKeyScreen", switcherTransform);
 
 
         foreach (Transform currentTransform in switcherTransform)

@@ -33,7 +33,8 @@ public class InputManager : ManagerBase
     public static event ButtonEvent      OnTiltButton;    
     public static event ButtonEvent      OnMapButton;    
     public static event ButtonEvent      OnInventoryButton;    
-    public static event ButtonEvent      OnCancelButton;  
+    public static event ButtonEvent      OnCancelButton;
+    public static event Action      OnAnyKey;
     
     public static event VectorEvent OnMove;
     
@@ -124,6 +125,7 @@ public class InputManager : ManagerBase
         InitializeAction("TapDown",              (context) => OnInventoryButton       ?.Invoke(true));
         InitializeAction("TapUp",                (context) => OnInventoryButton       ?.Invoke(false));
         InitializeAction("Cancel",               (context) => OnCancelButton          ?.Invoke(true));
+        InitializeAction("AnyKey",               (context) => OnAnyKey          ?.Invoke());
         
 
     }

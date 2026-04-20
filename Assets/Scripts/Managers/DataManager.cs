@@ -10,11 +10,14 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 
 public class DataManager : ManagerBase
 {   
     static Dictionary<System.Type, Dictionary<string, Object>> dataDictionary = new();
+
+    event System.Action DisconnectEvent;
     
 
     //프로퍼티는 변수모양이지만 함수
@@ -81,7 +84,8 @@ public class DataManager : ManagerBase
 
     protected override void OnDisconnected()
     {
-
+        DisconnectEvent?.Invoke();
+        DisconnectEvent = null;
     }
 
     //파일을 가지고 올 건데, "경로"로 가져오는 것이 중요한 이유!
@@ -191,7 +195,7 @@ public class DataManager : ManagerBase
 
         Task result = finder.Task;
         await result;
-        finder.Release();
+        DisconnectEvent += () => finder.Release();
     }
 
     
@@ -201,9 +205,10 @@ public class DataManager : ManagerBase
         var finder = Addressables.LoadAssetAsync<T>(address);
         await finder.Task; //Start/Run에 해당하는 부분
         SaveDataFile(finder.Result);
-        
+        DisconnectEvent += () => finder.Release();
 
-        
+
+
         //A-는 뜻이 뭘까?
         //An-
         //"~이 아닌"

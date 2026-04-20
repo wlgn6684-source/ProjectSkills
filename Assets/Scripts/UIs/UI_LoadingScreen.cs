@@ -22,11 +22,22 @@ public class UI_LoadingScreen : UI_ScreenBase, IOpenable, IProgress<int>, IStatu
     public UnityEngine.UI.Slider progressBar;
     public TMPro.TextMeshProUGUI progressText;
     public TMPro.TextMeshProUGUI explainText;
+
+
     public string SetCurrentStatus(string newText)
     {
         explainText.SetText(newText);
         return newText;
     }
+
+    public void SetComplete()
+    {
+
+        UIManager.ClaimOpenScreen(UIType.AnyKeyScreen);
+
+    }
+
+
     public int Set(int newCurrent) 
     { 
     
