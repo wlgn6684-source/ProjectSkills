@@ -50,6 +50,10 @@ public class GameManager : MonoBehaviour
     public static event UpdateEvent       OnUpdateController;
     public static event UpdateEvent       OnUpdateCharater;
     public static event UpdateEvent       OnUpdateObject;
+
+    public static event UpdateEvent       OnPhysicsCharacter;
+    public static event UpdateEvent       OnPhysicsObject;
+
     public static event DestroyEvent      OnDestroyManager;
     public static event DestroyEvent      OnDestroyController;
     public static event DestroyEvent      OnDestroyCharater;
@@ -300,5 +304,13 @@ public class GameManager : MonoBehaviour
 
     }
 
+    void FixedUpdate()
+    {
+        if (isLoading || !isPlaying) return;
 
+        float deltaTime = Time.fixedDeltaTime;
+
+        OnPhysicsCharacter?.Invoke(deltaTime);
+        OnPhysicsObject?.Invoke(deltaTime);
+    }
 }
