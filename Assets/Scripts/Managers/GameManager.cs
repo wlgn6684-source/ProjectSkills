@@ -59,7 +59,9 @@ public class GameManager : MonoBehaviour
     public static event DestroyEvent      OnDestroyCharater;
     public static event DestroyEvent      OnDestroyObject;
 
-   bool isPlaying = true;
+    [SerializeField] UIType startScreen;
+    
+    bool isPlaying = true;
    bool isLoading = true;
 
     //Awake : 이 친구가 시작할 때 (깨어남)
@@ -154,7 +156,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitUntil(() => isPlaying);
 
-        UIManager.ClaimOpenScreen(UIType.Title, ScreenChangeType.ScreenChanger);
+        UIManager.ClaimOpenScreen(startScreen, ScreenChangeType.ScreenChanger);
         InputManager.OnAnyKey -= UnPause;
         isLoading = false;
 

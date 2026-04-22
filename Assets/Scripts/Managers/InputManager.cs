@@ -34,9 +34,9 @@ public class InputManager : ManagerBase
     public static event ButtonEvent      OnMapButton;    
     public static event ButtonEvent      OnInventoryButton;    
     public static event ButtonEvent      OnCancelButton;
-    public static event Action      OnAnyKey;
+    public static event Action           OnAnyKey;
     
-    public static event VectorEvent OnMove;
+    public static event VectorEvent      OnMove;
     
     
     PlayerInput targetInput;
@@ -103,41 +103,43 @@ public class InputManager : ManagerBase
     {
         if(actionDictionary == null || actionDictionary.Count == 0) return;
         InitializeAction ("CursorPositionChanged",     (context) => CursorPositionChanged(GetVector2Value(context)));
-        InitializeAction ("Move",                      (context) => OnMove                  ?.Invoke(GetVector2Value(context)));
+        InitializeAction ("Movement",        (context) => OnMove                  ?.Invoke(GetVector2Value(context))
+                                            ,(context) => OnMove                  ?.Invoke(Vector2.zero));
 
-        InitializeAction ("MouseLeftButtonDown",           (context) => OnMouseLeftButton       ?.Invoke(true, cursorScreenPosition, cursorWorldPosition));
-        InitializeAction ("MouseRightButtonDown",          (context) => OnMouseRightButton      ?.Invoke(true, cursorScreenPosition, cursorWorldPosition));
-        InitializeAction ("MouseLeftButtonUp",           (context) => OnMouseLeftButton       ?.Invoke(false, cursorScreenPosition, cursorWorldPosition));
-        InitializeAction ("MouseRightButtonUp",          (context) => OnMouseRightButton      ?.Invoke(false, cursorScreenPosition, cursorWorldPosition));
+        InitializeAction ("MouseRightButton",(context) => OnMouseRightButton      ?.Invoke(true, cursorScreenPosition, cursorWorldPosition)
+        ,                                    (context) => OnMouseRightButton      ?.Invoke(false, cursorScreenPosition, cursorWorldPosition));
+        InitializeAction ("MouseLeftButton", (context) => OnMouseLeftButton       ?.Invoke(true, cursorScreenPosition, cursorWorldPosition)
+        ,                                    (context) => OnMouseLeftButton       ?.Invoke(false, cursorScreenPosition, cursorWorldPosition));
 
-        InitializeAction("MovementDown",         (context) => OnMovementButton        ?.Invoke(true));
-        InitializeAction("MovementUp",           (context) => OnMovementButton        ?.Invoke(false));
-        InitializeAction("InteractionDown",      (context) => OnInteractionButton     ?.Invoke(true));
-        InitializeAction("InteractionUp",        (context) => OnInteractionButton     ?.Invoke(false));
-        InitializeAction("RunningDown",          (context) => OnRunningButton         ?.Invoke(true));
-        InitializeAction("RunningUp",            (context) => OnRunningButton         ?.Invoke(false));
-        InitializeAction("InsensiblyDown",       (context) => OnInsensiblyButton      ?.Invoke(true));
-        InitializeAction("InsensiblyUp",         (context) => OnInsensiblyButton      ?.Invoke(false));
-        InitializeAction("TiltDown",             (context) => OnTiltButton            ?.Invoke(true));
-        InitializeAction("TiltUp",               (context) => OnTiltButton            ?.Invoke(false));
-        InitializeAction("MapDown",              (context) => OnMapButton             ?.Invoke(true));
-        InitializeAction("MapUp",                (context) => OnMapButton             ?.Invoke(false));
-        InitializeAction("TapDown",              (context) => OnInventoryButton       ?.Invoke(true));
-        InitializeAction("TapUp",                (context) => OnInventoryButton       ?.Invoke(false));
-        InitializeAction("Cancel",               (context) => OnCancelButton          ?.Invoke(true));
-        InitializeAction("AnyKey",               (context) => OnAnyKey          ?.Invoke());
+        InitializeAction("MovementDown",     (context) => OnMovementButton        ?.Invoke(true));
+        InitializeAction("MovementUp",       (context) => OnMovementButton        ?.Invoke(false));
+        InitializeAction("InteractionDown",  (context) => OnInteractionButton     ?.Invoke(true));
+        InitializeAction("InteractionUp",    (context) => OnInteractionButton     ?.Invoke(false));
+        InitializeAction("RunningDown",      (context) => OnRunningButton         ?.Invoke(true));
+        InitializeAction("RunningUp",        (context) => OnRunningButton         ?.Invoke(false));
+        InitializeAction("InsensiblyDown",   (context) => OnInsensiblyButton      ?.Invoke(true));
+        InitializeAction("InsensiblyUp",     (context) => OnInsensiblyButton      ?.Invoke(false));
+        InitializeAction("TiltDown",         (context) => OnTiltButton            ?.Invoke(true));
+        InitializeAction("TiltUp",           (context) => OnTiltButton            ?.Invoke(false));
+        InitializeAction("MapDown",          (context) => OnMapButton             ?.Invoke(true));
+        InitializeAction("MapUp",            (context) => OnMapButton             ?.Invoke(false));
+        InitializeAction("TapDown",          (context) => OnInventoryButton       ?.Invoke(true));
+        InitializeAction("TapUp",            (context) => OnInventoryButton       ?.Invoke(false));
+        InitializeAction("Cancel",           (context) => OnCancelButton          ?.Invoke(true));
+        InitializeAction("AnyKey",           (context) => OnAnyKey                ?.Invoke());
         
 
     }
 
     
 
-    void InitializeAction(string actionName, Action<InputAction.CallbackContext>actionMethod)
+    void InitializeAction(string actionName, Action<InputAction.CallbackContext>actionMethod, Action<InputAction.CallbackContext> cancelMethod = null)
     {
         if (actionDictionary == null) return;
-        if (actionDictionary.TryGetValue(actionName, out InputAction cursorPositionChange))
+        if (actionDictionary.TryGetValue(actionName, out InputAction currentInput))
         {
-            cursorPositionChange.performed += actionMethod;
+            if(actionMethod is not null) currentInput.performed += actionMethod;
+            if(cancelMethod is not null) currentInput.canceled += actionMethod;
         }
     }
 

@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 public enum UIType
 { 
-    None, Loading, Title, _Length, Movable, Menu, Lobby, Map, GameQuit, Profile, Ranking, Passive, Quest, Inventory, Equipment, Market, Customize, AnyKeyScreen
+    None, Loading, Title, _Length, Movable, Menu, Lobby, Map, GameQuit, Profile, Ranking, Passive, Quest, Inventory, Equipment, Market, Customize, AnyKeyScreen, InGame
 }
 
 public enum ScreenChangeType

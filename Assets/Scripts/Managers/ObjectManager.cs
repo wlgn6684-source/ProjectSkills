@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Principal;
 using UnityEngine;
 
 public class ObjectManager : ManagerBase
-{   
+{
     //변수가 아니라 상수인 셈
     readonly string[] globalPoolSettings =
     {
@@ -24,6 +23,7 @@ public class ObjectManager : ManagerBase
 
     protected override IEnumerator OnConnected(GameManager newManager)
     {
+        RegistrationInHierarchy();
         RegistrationPool(globalPoolSettings);
         InitializePool();
 
@@ -32,14 +32,14 @@ public class ObjectManager : ManagerBase
 
     protected override void OnDisconnected()
     {
-    
+
     }
     //오브젝트 풀링
     //만드는 과정을 줄이고 싶음 로딩중에 하고 싶다.
 
     public static GameObject CreateObject(string wantName, Transform parent = null)
     {
-        GameObject result =null;
+        GameObject result = null;
 
         wantName = wantName.ToLower();
 
@@ -48,14 +48,14 @@ public class ObjectManager : ManagerBase
             result = pool.CreateObject(parent);
         }
 
-        else 
+        else
         {
             //데이터에 있는지 확인
             if (DataManager.TryLoadDataFile<GameObject>(wantName, out GameObject prefab))
             {
                 if (prefab) result = Instantiate(prefab, parent);
             }
-            
+
         }
 
         if (!result) UIManager.ClaimErrorMessage(SystemMessage.ObjectNameNotFound(wantName));
@@ -149,11 +149,11 @@ public class ObjectManager : ManagerBase
                     break;
 
                 case Space.Self:
-                    result.transform.localPosition = position; 
+                    result.transform.localPosition = position;
                     break;
 
             }
-            
+
         }
         return result;
     }
@@ -170,11 +170,11 @@ public class ObjectManager : ManagerBase
                     break;
 
                 case Space.Self:
-                    result.transform.localPosition = position; 
+                    result.transform.localPosition = position;
                     break;
 
             }
-            
+
         }
         return result;
     }
@@ -197,7 +197,7 @@ public class ObjectManager : ManagerBase
                     break;
 
             }
-            
+
 
         }
         return result;
@@ -220,13 +220,13 @@ public class ObjectManager : ManagerBase
                     break;
 
             }
-            
+
 
         }
         return result;
     }
-    
-    
+
+
     public static GameObject CreateObject(string wantName, Transform parent, Vector3 position, Quaternion rotation, Vector3 scale, Space space = Space.Self)
     {
         GameObject result = CreateObject(wantName, parent);
@@ -261,10 +261,10 @@ public class ObjectManager : ManagerBase
                     result.transform.rotation = rotation;
                     result.transform.localScale = scale;
                     break;
-                    //float scaledScaleX = scale.x * (result.transform.localScale.x / result.transform.lossyScale.x);
-                    //float scaledScaleY = scale.y * (result.transform.localScale.y / result.transform.lossyScale.y);
-                    //float scaledScaleZ = scale.z * (result.transform.localScale.z / result.transform.lossyScale.z);
-                    //break;
+                //float scaledScaleX = scale.x * (result.transform.localScale.x / result.transform.lossyScale.x);
+                //float scaledScaleY = scale.y * (result.transform.localScale.y / result.transform.lossyScale.y);
+                //float scaledScaleZ = scale.z * (result.transform.localScale.z / result.transform.lossyScale.z);
+                //break;
 
                 case Space.Self:
                     result.transform.localPosition = position;
@@ -273,13 +273,13 @@ public class ObjectManager : ManagerBase
                     break;
 
             }
-            
+
 
         }
         return result;
     }
 
-    
+
 
     public static void RegistrationObject(GameObject target)
     {
@@ -304,7 +304,7 @@ public class ObjectManager : ManagerBase
         {
             Destroy(target);
         }
-        
+
     }
 
     public static void UnregistrationObject(GameObject target)
@@ -316,8 +316,18 @@ public class ObjectManager : ManagerBase
         }
     }
 
+    public void RegistrationInHierarchy()
+    {
+        foreach (MonoBehaviour current in FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+        if(current is IFunctionable currentfunctionable)
+        {
+                currentfunctionable.RegistrationFunctions();
+        }
+        
+    }
+
     public void RegistrationPool(string poolName)
-    {   
+    {
         poolName = poolName.ToLower();
         PoolRequest currentRequest = DataManager.LoadDataFile<PoolRequest>(poolName);
         if (currentRequest == null) return;
@@ -336,11 +346,11 @@ public class ObjectManager : ManagerBase
 
     //가변인자 => 인자의 개수가 무한정 늘어날 수 있는 함수
     //변인 => Parameter 변인들 Parameters 줄이면 params
-    
+
     public void RegistrationPool(params string[] poolNames)
     {
         foreach (string poolName in poolNames)
-        { 
+        {
             RegistrationPool(poolName);
         }
     }

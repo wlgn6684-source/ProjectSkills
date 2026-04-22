@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2cce85be5754ca46bac498f7043f883, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  startScreen: 18
 --- !u!4 &20637108
 Transform:
   m_ObjectHideFlags: 0
@@ -569,8 +570,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6676323734410540723, guid: 0f010fbdd32989649b72d1c321c96b3d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1091412106}
   m_SourcePrefab: {fileID: 100100000, guid: 0f010fbdd32989649b72d1c321c96b3d, type: 3}
+--- !u!1 &1091412102 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6676323734410540723, guid: 0f010fbdd32989649b72d1c321c96b3d, type: 3}
+  m_PrefabInstance: {fileID: 848068090}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1091412106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1091412102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 303432abd96930a4ca4039ee105b14b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_InGameScreen
+  requiredUI: []
 --- !u!1 &1316240851
 GameObject:
   m_ObjectHideFlags: 0
