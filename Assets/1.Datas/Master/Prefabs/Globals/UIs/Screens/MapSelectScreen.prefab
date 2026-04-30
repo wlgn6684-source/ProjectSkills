@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 630443838268014350}
   - component: {fileID: 5646826010942150584}
   m_Layer: 5
-  m_Name: Image (2)
+  m_Name: Dingeon:DarkLand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 4990631401637461898}
   - component: {fileID: 2166871950171991805}
   m_Layer: 5
-  m_Name: Image (3)
+  m_Name: MapSelectBanner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -932,7 +932,7 @@ GameObject:
   - component: {fileID: 2038972247140452958}
   - component: {fileID: 2851463183259388275}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: Dingeon:DeepHole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1147,7 +1147,7 @@ GameObject:
   - component: {fileID: 9098930096922579857}
   - component: {fileID: 2817389160407697013}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Dingeon:Nightmare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
