@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using static UnityEngine.GraphicsBuffer;
 
 
 //          
@@ -43,10 +44,11 @@ public class InputManager : ManagerBase
     Dictionary<string, InputAction> actionDictionary = new();
     List<RaycastResult> cursorHitList = new();
 
+    GameObject cursorHoverObject;
     Vector2 cursorScreenPosition;
     Vector3 cursorWorldPosition; 
 
-    public bool is2D = true;
+    
 
     protected override IEnumerator OnConnected(GameManager newManager)
     {   
@@ -68,20 +70,68 @@ public class InputManager : ManagerBase
 
     public void UpdateEvent(float deltaTime) 
     {
-        RefreshGameObjectUnderCursor();
+        RefreshGameObjectUnderCursor(cursorScreenPosition);
     }
     
-    void RefreshGameObjectUnderCursor()
+    void RefreshGameObjectUnderCursor(Vector2 screenPosition)
     {
         cursorHitList.Clear();
-        if (is2D)
+        GameManager.Instance.Camera.GetRaycastResult(screenPosition, cursorHitList);
+
+        //마우스의 화면상 실제 픽셀위치
+        //Vector2 screenPosition = context.ReadValue<Vector2>();
+        //화면상 x축으로 1픽셀
+        //유니티에서 1칸은 1m
+        //카메라를 기준으로 세상을 본다
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
+        GameObject firstObject = null;
+        if (cursorHitList.Count > 0 && cursorHitList[0].element != null)
         {
-            GameManager.Instance.Camera.GetRaycastResult2D(cursorScreenPosition, cursorHitList);
+            firstObject = cursorHitList[0].gameObject; 
         }
+
+        if (GameManager.is2D)
+        {
+            worldPosition.z = 0;
+            float GetValue (RaycastResult target)
+            {
+                return target.sortingOrder + target.sortingLayer * 100000;
+                
+            }
+            RaycastResult nearest = cursorHitList.GetMaximum<RaycastResult>(GetValue);
+            firstObject = nearest.gameObject;
+            worldPosition = nearest.worldPosition;
+
+        }
+
         else
         {
-            GameManager.Instance.Camera.GetRaycastResult3D(cursorScreenPosition, cursorHitList);
+            float GetDistance (RaycastResult target)
+            { 
+                return target.distance;
+            }
+            RaycastResult nearest = cursorHitList.GetMinimum<RaycastResult>(GetDistance);
+            firstObject = nearest.gameObject;
+            worldPosition = nearest.worldPosition;
         }
+
+
+        float firstDistance = float.MaxValue;
+        Vector3 firstPosition = worldPosition;
+        foreach (RaycastResult currentResult in cursorHitList)
+        {
+            float currentDistance = currentResult.distance;
+            if (currentDistance < firstDistance)
+            {
+                firstObject = currentResult.gameObject;
+                firstDistance = currentDistance;
+                firstPosition = currentResult.worldPosition;
+            }
+        }
+
+        cursorScreenPosition = screenPosition;
+        cursorWorldPosition = worldPosition;
+
     }
 
     public GameObject GetGameObjectUnderCursor()
@@ -153,35 +203,10 @@ public class InputManager : ManagerBase
     void CursorPositionChanged(Vector2 screenPosition)
     //
     {
-        Camera mainCamera = Camera.main;
-        Physics2DRaycaster raycaster2D = mainCamera.GetComponent<Physics2DRaycaster>();
-        PhysicsRaycaster raycaster = mainCamera.GetComponent<PhysicsRaycaster>();
-
-       
-
-        //마우스의 화면상 실제 픽셀위치
-        //Vector2 screenPosition = context.ReadValue<Vector2>();
-        //화면상 x축으로 1픽셀
-        //유니티에서 1칸은 1m
-        //카메라를 기준으로 세상을 본다
-        Vector3 worldPosition;
-
-        if (is2D)
-        {
-            worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
-            worldPosition.z = 0;
-        }
-
-        else 
-        {
-            worldPosition = Vector3.zero;
-        }
-        
-        cursorScreenPosition = screenPosition;
-        cursorWorldPosition = worldPosition;
+        RefreshGameObjectUnderCursor(screenPosition); //화면상 위치가 바뀌면 그 위치에 있는 게임오브젝트도 바뀌니까 새로고침
 
         //대리자는 모든 스킬을 한번에 사용 할 수 있지만 가르쳐주지 않으면 아무것도 할 수 없다
-        OnMouseMove?.Invoke(screenPosition, worldPosition); 
+        OnMouseMove?.Invoke(cursorScreenPosition, cursorWorldPosition); 
     }
 
    

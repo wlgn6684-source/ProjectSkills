@@ -61,8 +61,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] UIType startScreen;
     
+    public static bool is2D = true;
     bool isPlaying = true;
-   bool isLoading = true;
+    bool isLoading = true;
 
     //Awake : 이 친구가 시작할 때 (깨어남)
     //OnEnabled : 이 친구가 시작할 때

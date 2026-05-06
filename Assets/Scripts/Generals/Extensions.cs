@@ -2,6 +2,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using Unity.Mathematics.Geometry;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 //확장 메소드들을 가지고 있을 친구들
 //영토 확장
@@ -44,6 +45,30 @@ public static class Extensions
         if (target == null) return null;
         else                return target.gameObject.TryAddComponent<T>(); //NRVO
     }
+
+    public static T GetExtreme<T>(this IEnumerable targetList, float defaultScore, 
+        System.Func<T, float> Evalueator, 
+        System.Func<float,float,bool> Comparison)
+    {
+        T result = default;
+        float firstScore = defaultScore;
+
+        foreach (T currentTarget in targetList)
+        {
+            float currentScore = Evalueator(currentTarget);
+            if (Comparison(currentScore, firstScore)) // a = currentScore, b = firstScore
+            {
+                result = currentTarget;
+                firstScore = currentScore;
+            }
+        }
+        return result;
+    }
+
+    public static T GetMaximum<T>(this IEnumerable targetList, System.Func<T, float> Evalueator)
+    => GetExtreme(targetList, float.MinValue, Evalueator, (a,b) => a > b);
+    public static T GetMinimum<T>(this IEnumerable targetList, System.Func<T, float> Evalueator)
+    => GetExtreme(targetList, float.MaxValue, Evalueator, (a,b) => a < b);
 
     public static IEnumerator WaitforTask(this Task targetTask)
     {
