@@ -13,6 +13,7 @@ using static UnityEngine.GraphicsBuffer;
 // 플레이어가 할 일 대리 뛰어주고, 열려있는 창이 있다면 그 친구의 기능도 수행하고 간다!
 public delegate void MouseButtonEvent(bool value, Vector2 position, Vector3 worldPosition);
 public delegate void MouseMoveEvent(Vector2 screenPosition, Vector3 worldPosition);
+public delegate void MouseHoverEvent(GameObject newTarget, GameObject oldTarget);
 public delegate void ButtonEvent(bool value);
 public delegate void VectorEvent(Vector2 value);
 public delegate void AxisEvent(Vector2 value);
@@ -27,6 +28,7 @@ public class InputManager : ManagerBase
     public static event MouseButtonEvent OnMouseRightButton;
        
     public static event MouseMoveEvent   OnMouseMove;    
+    public static event MouseHoverEvent   OnMouseHover;    
     public static event ButtonEvent      OnMovementButton;    
     public static event ButtonEvent      OnInteractionButton;    
     public static event ButtonEvent      OnRunningButton;    
@@ -100,7 +102,7 @@ public class InputManager : ManagerBase
             }
             RaycastResult nearest = cursorHitList.GetMaximum<RaycastResult>(GetValue);
             firstObject = nearest.gameObject;
-            worldPosition = nearest.worldPosition;
+            
 
         }
 
@@ -115,23 +117,16 @@ public class InputManager : ManagerBase
             worldPosition = nearest.worldPosition;
         }
 
-
-        float firstDistance = float.MaxValue;
-        Vector3 firstPosition = worldPosition;
-        foreach (RaycastResult currentResult in cursorHitList)
-        {
-            float currentDistance = currentResult.distance;
-            if (currentDistance < firstDistance)
-            {
-                firstObject = currentResult.gameObject;
-                firstDistance = currentDistance;
-                firstPosition = currentResult.worldPosition;
-            }
-        }
+        GameObject lastHoverObject = cursorHoverObject;
 
         cursorScreenPosition = screenPosition;
         cursorWorldPosition = worldPosition;
+        cursorHoverObject = firstObject;
 
+        if (lastHoverObject != firstObject)
+        {
+            OnMouseHover?.Invoke(firstObject, lastHoverObject);
+        }
     }
 
     public GameObject GetGameObjectUnderCursor()
