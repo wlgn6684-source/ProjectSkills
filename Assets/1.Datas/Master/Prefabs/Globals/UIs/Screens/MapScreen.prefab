@@ -213,13 +213,63 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3987167149865499208, guid: 69543cab5ff22df47a2b0030b9b49b59, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3987167149865499208, guid: 69543cab5ff22df47a2b0030b9b49b59, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3987167149865499208, guid: 69543cab5ff22df47a2b0030b9b49b59, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5341103901800201856}
+    - target: {fileID: 3987167149865499208, guid: 69543cab5ff22df47a2b0030b9b49b59, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3987167149865499208, guid: 69543cab5ff22df47a2b0030b9b49b59, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Open
+      objectReference: {fileID: 0}
+    - target: {fileID: 3987167149865499208, guid: 69543cab5ff22df47a2b0030b9b49b59, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UI_Button_OpenScreen, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3987167149865499208, guid: 69543cab5ff22df47a2b0030b9b49b59, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2519831091377753634, guid: 69543cab5ff22df47a2b0030b9b49b59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5341103901800201856}
   m_SourcePrefab: {fileID: 100100000, guid: 69543cab5ff22df47a2b0030b9b49b59, type: 3}
 --- !u!224 &5108034741199788614 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3097250291484905225, guid: 69543cab5ff22df47a2b0030b9b49b59, type: 3}
   m_PrefabInstance: {fileID: 7789193475567621455}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5683818932955372397 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2519831091377753634, guid: 69543cab5ff22df47a2b0030b9b49b59, type: 3}
+  m_PrefabInstance: {fileID: 7789193475567621455}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5341103901800201856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5683818932955372397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac7a90a7ceb43c42acd5ca5fe14243c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_Button_OpenScreen
+  wantType: 6
+  changeType: 1

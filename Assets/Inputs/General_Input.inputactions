@@ -160,6 +160,17 @@
                 },
                 {
                     "name": "",
+                    "id": "5ee9fcb5-f480-4b52-960c-e644ac7494c2",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseLeftButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "30e44869-a760-4ab7-971d-875eb32b84c9",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
@@ -223,6 +234,28 @@
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "c50104cb-7666-41d6-bc14-5731b5680f74",
+                    "path": "<Touchscreen>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8125c6b1-561c-4aef-add6-bc82f8001c82",
+                    "path": "<Touchscreen>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 },
                 {
                     "name": "",
@@ -338,6 +371,17 @@
                     "name": "",
                     "id": "26dac387-6adc-4929-ab48-57fe1ad8aa3b",
                     "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AnyKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "75eccc46-a63c-442a-899e-2b69d8755c98",
+                    "path": "<Touchscreen>/Press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

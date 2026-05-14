@@ -1939,6 +1939,7 @@ GameObject:
   - component: {fileID: 5759234082976885666}
   - component: {fileID: 8497094438072439121}
   - component: {fileID: 2036195219859216658}
+  - component: {fileID: 2901465722520510551}
   m_Layer: 5
   m_Name: ExitButton
   m_TagString: Untagged
@@ -2047,7 +2048,33 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8497094438072439121}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2901465722520510551}
+        m_TargetAssemblyTypeName: UI_Button_OpenScreen, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2901465722520510551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2303844934300205010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac7a90a7ceb43c42acd5ca5fe14243c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_Button_OpenScreen
+  wantType: 6
+  changeType: 1
 --- !u!1 &2387534173732094994
 GameObject:
   m_ObjectHideFlags: 0
@@ -3502,6 +3529,7 @@ GameObject:
   - component: {fileID: 715024138214542572}
   - component: {fileID: 7258812850120614158}
   - component: {fileID: 7334164211070448580}
+  - component: {fileID: -266424065557540416}
   m_Layer: 5
   m_Name: MarketScreen
   m_TagString: Untagged
@@ -3595,6 +3623,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &-266424065557540416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4576188086190310007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82ec9b12f004e6a47809216f0175bc36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_MarketScreen
+  requiredUI: []
 --- !u!1 &4875806779153516522
 GameObject:
   m_ObjectHideFlags: 0
