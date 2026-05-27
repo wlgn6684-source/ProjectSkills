@@ -12,8 +12,23 @@ public class Inventory : MonoBehaviour
 
     public void Initialize()
     { 
-        slots = new ItemSlot[columns, rows];
+        slots = new ItemSlot[rows, columns];
+
+        for (int row = 0; row < rows; row++)
+        {
+            for (int column = 0; column < columns; column++)
+            {
+                slots[row, column] = new ItemSlot();
+            }
+        }
     }
+
+    public void HealPotionPlus()
+    {
+       ItemContainer potion = DataManager.LoadDataFile<ItemContainer>("LesserHealPotion");
+        AddItem(potion);
+    }
+
     public void Sort(System.Comparison<ItemContainer> Method)
     { 
         
@@ -30,10 +45,10 @@ public class Inventory : MonoBehaviour
     public bool InsertAll(Inventory other, ItemContainer target)
     { return default; }
 
-    public void LockSlot(int wantRows, int wantColumn)
+    public void LockSlot(int wantRow, int wantColumn)
     { }
 
-    public void UnLockSlot(int wantRows, int wantColumn)
+    public void UnLockSlot(int wantRow, int wantColumn)
     { }
 
     public int CountItem(ItemContainer wantItem)
@@ -45,13 +60,35 @@ public class Inventory : MonoBehaviour
         returnSlots = default;
         return default;
     }
+    public ItemSlot[] GetAllSlot()
+    {   // X = 열의 갯수 * R + C
+
+        ItemSlot[] result = new ItemSlot[slots.Length];
+
+        int height = slots.GetLength(0);
+        int width = slots.GetLength(1);
+
+        for (int row = 0; row < height; row++)
+        {
+            for (int column = 0; column < width; column++)
+            {
+                result[width * row + column] = slots[row, column];
+            }
+        }
+        return result;
+    }
 
     public ItemSlot FindItem(ItemContainer target)
     { return default; }
     public ItemSlot FindItem(ItemType wantType)
     { return default; }
-    public ItemSlot FindItem(int wantRows, int wantColumn)
-    { return default; }
+    public ItemSlot FindItem(int wantRow, int wantColumn)
+    {
+        if (wantRow < 0 || wantColumn < 0)      return null;
+        if (wantRow >= slots.GetLength(0))      return null;
+        if (wantColumn >= slots.GetLength(1))   return null;
+        return slots[wantRow, wantColumn]; 
+    }
     public ItemSlot FindItem(string containWord)
     { return default; }
 
@@ -65,6 +102,7 @@ public class Inventory : MonoBehaviour
     { return default; }
     public int AddItem(ItemContainer wantItem, int amount = 1)
     {
+        slots[0, 0].AddItem(wantItem, amount);
         return default;
     }
     public int AddItemOnExistSlots(ItemContainer wantItem, int amount)

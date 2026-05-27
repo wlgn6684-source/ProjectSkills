@@ -73,6 +73,9 @@ public class DataManager : ManagerBase
         yield return LoadAllFromAssetBundle<GameObject>("Global", ProgressOnLoad).WaitforTask();
         loadString = "Load Pool Requests";
         yield return LoadAllFromAssetBundle<PoolRequest>("Global", ProgressOnLoad).WaitforTask();
+        loadString = "Load Items";
+        yield return LoadAllFromAssetBundle<PoolRequest>("Global", ProgressOnLoad).WaitforTask();
+
 
 
         //GameObject prefab = LoadDataFile<GameObject>("Square 13");

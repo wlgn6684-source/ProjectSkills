@@ -90,6 +90,7 @@ public class UIManager : ManagerBase
         CreateUI(UIType.Passive, "PassiveSkillScreen", switcherTransform);
         CreateUI(UIType.Market, "MarketScreen", switcherTransform);
         CreateUI(UIType.WorkBench, "WorkBenchScreen", switcherTransform);
+        CreateUI(UIType.InGame, "InGameScreen", switcherTransform);
 
 
         foreach (Transform currentTransform in switcherTransform)
