@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e75527b7bf75b974e95a686a00a114e2, type: 3}
   m_Name: LesserHealPotion
   m_EditorClassIdentifier: Assembly-CSharp::ItemContainer
-  icon: {fileID: 0}
+  icon: {fileID: 5263133590783258918, guid: 7bf285f98b6eb4c49926c147dbd509dd, type: 3}
   displayName: 
   explain: 
   Type: 1

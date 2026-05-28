@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Inventory : MonoBehaviour
 {
@@ -60,10 +61,10 @@ public class Inventory : MonoBehaviour
         returnSlots = default;
         return default;
     }
-    public ItemSlot[] GetAllSlot()
+    public IEnumerable<ItemSlot> GetAllSlot()
     {   // X = 열의 갯수 * R + C
 
-        ItemSlot[] result = new ItemSlot[slots.Length];
+        //ItemSlot[] result = new ItemSlot[slots.Length];
 
         int height = slots.GetLength(0);
         int width = slots.GetLength(1);
@@ -72,10 +73,26 @@ public class Inventory : MonoBehaviour
         {
             for (int column = 0; column < width; column++)
             {
-                result[width * row + column] = slots[row, column];
+                if (slots[row, column] is null) continue;
+                yield return slots[row, column];
             }
         }
-        return result;
+      
+    }
+    public IEnumerable<ItemSlot> GetAllSlotReverse()
+    {
+        int height = slots.GetLength(0);
+        int width = slots.GetLength(1);
+
+        for (int row = height - 1; row >= 0; row--)
+        {
+            for (int column = width -1; column >= 0; column--)
+            {
+                if (slots[row, column] is null) continue;
+                yield return slots[row, column];
+            }
+        }
+      
     }
 
     public ItemSlot FindItem(ItemContainer target)
@@ -92,27 +109,60 @@ public class Inventory : MonoBehaviour
     public ItemSlot FindItem(string containWord)
     { return default; }
 
-    public ItemSlot FindFirstEmptySlot()
-    { return default; }
-    public ItemSlot FindLastEmptySlot()
-    { return default; }
-    public ItemSlot FindFirstItem(ItemContainer target)
-    { return default; }
-    public ItemSlot FindLastItem(ItemContainer target)
-    { return default; }
+    public IEnumerable<ItemSlot> FindFirstEmptySlot()
+    {
+        foreach (ItemSlot currentSlot in GetAllSlot())
+        { 
+                if(currentSlot.GetIsEmpty()) yield return currentSlot;
+        }
+    }
+    public IEnumerable<ItemSlot> FindLastEmptySlot()
+    {
+        foreach (ItemSlot currentSlot in GetAllSlotReverse())
+        {
+            if (currentSlot.GetIsEmpty()) yield return currentSlot;
+        }
+    }
+    public IEnumerable<ItemSlot>FindFirstItem(ItemContainer target)
+    {
+        foreach (ItemSlot currentSlot in GetAllSlot())
+            if (currentSlot.GetItem() == target) yield return currentSlot;
+    }
+    public IEnumerable<ItemSlot>FindLastItem(ItemContainer target)
+    {
+        foreach (ItemSlot currentSlot in GetAllSlotReverse())
+        {
+            if (currentSlot.GetItem() == target) yield return currentSlot;
+        }
+    }
     public int AddItem(ItemContainer wantItem, int amount = 1)
     {
-        slots[0, 0].AddItem(wantItem, amount);
-        return default;
+    
+            amount = AddItemOnExistSlots(wantItem, amount);
+            if (amount <= 0) return 0;
+            return AddItemOnEmptySlots(wantItem, amount);
+    
     }
     public int AddItemOnExistSlots(ItemContainer wantItem, int amount)
     {
-        return default;
+        foreach (ItemSlot currentSlot in FindFirstItem(wantItem))
+        {
+            if (amount <= 0) return 0;
+            amount = currentSlot.AddItem(wantItem, amount);
+            currentSlot.NoticeChangeed();
+        }
+        return amount;
     }
 
     public int AddItemOnEmptySlots(ItemContainer wantItem, int amount)
     {
-        return default;
+        foreach (ItemSlot currentSlot in FindFirstEmptySlot())
+        {
+            if (amount <= 0) return 0;
+            amount = currentSlot.AddItem(wantItem, amount);
+            currentSlot.NoticeChangeed();
+        }
+        return amount;
     }
 
     public int AddItemToLocation(ItemContainer wantItem, int amount, int row, int column)

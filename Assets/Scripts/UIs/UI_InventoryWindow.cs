@@ -27,8 +27,8 @@ public class UI_InventoryWindow : OpenableUIBase
             asGridLayout.constraintCount = targetInventory.columns;
         }
 
-        ItemSlot[] inventorySlots = newInventory.GetAllSlot();
-        foreach(ItemSlot currentSlot in inventorySlots)
+
+        foreach(ItemSlot currentSlot in newInventory.GetAllSlot())
         {
             if (currentSlot is null) continue;
             GameObject instance = ObjectManager.CreateObject(itemSlotPrefabName, layout.transform);

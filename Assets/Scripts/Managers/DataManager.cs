@@ -74,7 +74,7 @@ public class DataManager : ManagerBase
         loadString = "Load Pool Requests";
         yield return LoadAllFromAssetBundle<PoolRequest>("Global", ProgressOnLoad).WaitforTask();
         loadString = "Load Items";
-        yield return LoadAllFromAssetBundle<PoolRequest>("Global", ProgressOnLoad).WaitforTask();
+        yield return LoadAllFromAssetBundle<ItemContainer>("Global", ProgressOnLoad).WaitforTask();
 
 
 
