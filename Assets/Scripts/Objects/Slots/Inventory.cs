@@ -24,10 +24,15 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void HealPotionPlus()
+    public void HealPotionPlus(int amount)
     {
        ItemContainer potion = DataManager.LoadDataFile<ItemContainer>("LesserHealPotion");
-        AddItem(potion);
+        AddItem(potion, amount);
+    }
+    public void HealPotionMinus(int amount)
+    {
+       ItemContainer potion = DataManager.LoadDataFile<ItemContainer>("LesserHealPotion");
+        RemoveItem(potion, amount);
     }
 
     public void Sort(System.Comparison<ItemContainer> Method)
@@ -182,11 +187,23 @@ public class Inventory : MonoBehaviour
     }
     public int RemoveItem(ItemContainer wantItem) 
     {
-        return default;
+        int result = 0;
+        foreach (ItemSlot currentSlot in FindFirstItem(wantItem))
+        {
+            result+= currentSlot.RemoveItem(wantItem);
+            currentSlot.NoticeChangeed();
+        }
+        return result;
     }
     public int RemoveItem(ItemContainer wantItem, int amount) 
     {
-        return default;
+        foreach (ItemSlot currentSlot in FindFirstItem(wantItem))
+        {
+            if (amount <= 0) return 0;
+            amount = currentSlot.RemoveItem(wantItem, amount);
+            currentSlot.NoticeChangeed();
+        }
+        return amount;
     }
     public int RemoveItemOnExistSlots(ItemContainer wantItem, int amount)
     {
