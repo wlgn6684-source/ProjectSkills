@@ -24,9 +24,9 @@ public class UI_TargetHover : OpenableUIBase
             transform.position = Camera.main.WorldToScreenPoint(target.transform.position) + (Vector3)shiftedPosition;
     }
 
-    public override void UnRegistration(UIManager manager)
+    public override void Unregistration(UIManager manager)
     {
-        base.UnRegistration(manager);
+        base.Unregistration(manager);
         InputManager.OnMouseHover -= HoverInfoChange;
         InputManager.OnMouseMove -= MoveToMouse;
     }

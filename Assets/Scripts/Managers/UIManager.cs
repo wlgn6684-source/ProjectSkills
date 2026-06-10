@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 public enum UIType
 { 
     None, Loading, Title, _Length, Movable, Menu, Lobby, Map, GameQuit, Passive, Quest, Inventory, Equipment, AnyKeyScreen, InGame, TargetHover, Storage, MapSelect,
-    Market, WorkBench
+    Market, WorkBench, ItemCursorSlot, Lengh
 }
 
 public enum ScreenChangeType
@@ -30,6 +30,7 @@ public class UIManager : ManagerBase
     public Canvas MainCanvas => _mainCanvas;
 
     UIBase _movableScreen;
+    RectTransform overlayTransform;
     RectTransform switcherTransform;
     RectTransform createdTransform;
     RectTransform changerTransform;
@@ -101,6 +102,9 @@ public class UIManager : ManagerBase
         changerTransform = CreateFullScreen("ScreenChanger");
         changerTransform.SetAsLastSibling();
 
+        overlayTransform = CreateFullScreen("Overlay");
+        overlayTransform.SetAsLastSibling();
+
         for (ScreenChangeType currentChanger = (ScreenChangeType)1;
             currentChanger < ScreenChangeType._Length;
             currentChanger++)
@@ -159,6 +163,13 @@ public class UIManager : ManagerBase
 
     }
 
+    protected UIBase CreateOverlay(UIType wantType, string wantName)
+    {
+        return CreateUI(wantType, wantName, overlayTransform ?? MainCanvas?.transform);
+    }
+
+    public static UIBase ClaimOverlay(UIType wantType, string wantName) => GameManager.Instance.UI?.CreateOverlay(wantType, wantName);  
+
     protected UIBase CreateUI(UIType wantType, string wantName)
     {
         UIBase result = CreateUI(wantType, wantName, createdTransform ?? MainCanvas?.transform);
@@ -182,7 +193,7 @@ public class UIManager : ManagerBase
     {
         if (!wantUI) return;
 
-        wantUI.UnRegistration(this);
+        wantUI.Unregistration(this);
     }
 
     public static void ClaimUnsetUI(UIBase wantUI) => GameManager.Instance?.UI?.UnSetUI(wantUI);

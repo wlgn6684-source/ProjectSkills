@@ -46,9 +46,9 @@ public class InputManager : ManagerBase
     Dictionary<string, InputAction> actionDictionary = new();
     List<RaycastResult> cursorHitList = new();
 
-    GameObject cursorHoverObject;
-    Vector2 cursorScreenPosition;
-    Vector3 cursorWorldPosition; 
+    public static GameObject cursorHoverObject;
+    public static Vector2 cursorScreenPosition;
+    public static Vector3 cursorWorldPosition; 
 
     
 
@@ -184,7 +184,7 @@ public class InputManager : ManagerBase
         if (actionDictionary.TryGetValue(actionName, out InputAction currentInput))
         {
             if(actionMethod is not null) currentInput.performed += actionMethod;
-            if(cancelMethod is not null) currentInput.canceled += actionMethod;
+            if(cancelMethod is not null) currentInput.canceled += cancelMethod;
         }
     }
 

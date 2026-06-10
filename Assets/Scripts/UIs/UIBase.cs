@@ -7,7 +7,7 @@ public class UIBase : MonoBehaviour
         
     }
 
-    public virtual void UnRegistration(UIManager manager)
+    public virtual void Unregistration(UIManager manager)
     { 
     
     }

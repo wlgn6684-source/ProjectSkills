@@ -4,6 +4,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Inventory : MonoBehaviour
 {
+    public static ItemSlot cursorSlot = new ItemSlot();
     // Columns Rows
     //   열     행
     public int columns;
@@ -142,10 +143,10 @@ public class Inventory : MonoBehaviour
     }
     public int AddItem(ItemContainer wantItem, int amount = 1)
     {
-    
-            amount = AddItemOnExistSlots(wantItem, amount);
-            if (amount <= 0) return 0;
-            return AddItemOnEmptySlots(wantItem, amount);
+        
+        amount = AddItemOnExistSlots(wantItem, amount);
+        if (amount <= 0) return 0;
+        return AddItemOnEmptySlots(wantItem, amount);
     
     }
     public int AddItemOnExistSlots(ItemContainer wantItem, int amount)
@@ -154,7 +155,7 @@ public class Inventory : MonoBehaviour
         {
             if (amount <= 0) return 0;
             amount = currentSlot.AddItem(wantItem, amount);
-            currentSlot.NoticeChangeed();
+            currentSlot.NoticeChanged();
         }
         return amount;
     }
@@ -165,7 +166,7 @@ public class Inventory : MonoBehaviour
         {
             if (amount <= 0) return 0;
             amount = currentSlot.AddItem(wantItem, amount);
-            currentSlot.NoticeChangeed();
+            currentSlot.NoticeChanged();
         }
         return amount;
     }
@@ -191,7 +192,7 @@ public class Inventory : MonoBehaviour
         foreach (ItemSlot currentSlot in FindFirstItem(wantItem))
         {
             result+= currentSlot.RemoveItem(wantItem);
-            currentSlot.NoticeChangeed();
+            currentSlot.NoticeChanged();
         }
         return result;
     }
@@ -201,7 +202,7 @@ public class Inventory : MonoBehaviour
         {
             if (amount <= 0) return 0;
             amount = currentSlot.RemoveItem(wantItem, amount);
-            currentSlot.NoticeChangeed();
+            currentSlot.NoticeChanged();
         }
         return amount;
     }
@@ -218,9 +219,36 @@ public class Inventory : MonoBehaviour
         return default;
     }
 
-    public bool MoveItem(int startRow, int startColumn, Inventory targetInventory, int targetRow, int targetColumn, int amount = -1)
+    public void MoveItem(int startRow, int startColumn, Inventory targetInventory, int targetRow, int targetColumn, int amount = -1)
+    { 
+    
+    }
+    public void ExChangeItem(int startRow, int startColumn, int targetRow, int targetColumn)
+    { 
+        ExChangeItem(startRow, startColumn, this, targetRow, targetColumn);
+
+    }
+    public void ExChangeItem(int startRow, int startColumn, ItemSlot targetSlot)
     {
-        return default;
+        if (targetSlot is null) return;
+        ItemSlot first = FindItem(startRow, startColumn);
+        if (first is null) return;
+        first.ExChangeItem(targetSlot);
+        first.NoticeChanged();
+        targetSlot.NoticeChanged();
+    }
+    public void ExChangeItem(int startRow, int startColumn, Inventory targetInventory, int targetRow, int targetColumn)
+    {
+        ItemSlot first = FindItem(startRow, startColumn);
+        if(first is null) return;
+        if (!targetInventory) return;
+        ItemSlot second = targetInventory.FindItem(targetRow, targetColumn);
+        if(second is null) return;
+
+        first.ExChangeItem(second);
+        first.NoticeChanged();
+        second.NoticeChanged();
+
     }
     public bool UseItem(ItemContainer target)
     {

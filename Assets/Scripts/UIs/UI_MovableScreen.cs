@@ -24,9 +24,9 @@ public class UI_MovableScreen : UI_ScreenBase
         UIManager.OnPopUp += PopUp;
     }
 
-    public override void UnRegistration(UIManager manager)
+    public override void Unregistration(UIManager manager)
     {
-        base.UnRegistration(manager);
+        base.Unregistration(manager);
         InputManager.OnMouseMove -= MouseMove;
         InputManager.OnMouseLeftButton -= MouseLeft;
         UIManager.OnPopUp -= PopUp;

@@ -13,7 +13,7 @@ public class ItemSlot
     [SerializeField] int currentStack;
 
     public event ItemSlotChangeEvent OnItemSlotChanged;
-    public void NoticeChangeed() => OnItemSlotChanged?.Invoke(this);
+    public void NoticeChanged() => OnItemSlotChanged?.Invoke(this);
     public virtual bool Containable(ItemContainer wantItem)
     {
         if (wantItem is null) return false;
@@ -61,5 +61,24 @@ public class ItemSlot
         if(amount >= currentStack) return amount - Clear();
         currentStack -= amount;
         return 0;
+    }
+
+    public void ExChangeItem(ItemSlot wantSlot)
+    {
+        if (wantSlot is null) return;
+        ItemContainer wasItem = item;
+        int wasStack = currentStack;
+        item = wantSlot.item;
+        currentStack = wantSlot.currentStack;
+        wantSlot.item = wasItem;
+        wantSlot.currentStack = wasStack;
+    }
+
+    internal void LeftClick(ItemSlot wantSlot)
+    {
+        if(wantSlot is null) return;
+        ExChangeItem(wantSlot);
+        NoticeChanged();
+        wantSlot?.NoticeChanged();
     }
 }

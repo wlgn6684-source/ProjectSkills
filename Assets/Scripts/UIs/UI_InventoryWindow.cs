@@ -40,9 +40,9 @@ public class UI_InventoryWindow : OpenableUIBase
         }
     }
 
-    public override void UnRegistration(UIManager manager)
+    public override void Unregistration(UIManager manager)
     {
-        base.UnRegistration(manager);
+        base.Unregistration(manager);
         DisconnectInventory();
     }
 

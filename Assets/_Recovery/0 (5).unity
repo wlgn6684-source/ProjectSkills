@@ -588,22 +588,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: InGameScreen
       objectReference: {fileID: 0}
-    - target: {fileID: 8052304309142861026, guid: 0f010fbdd32989649b72d1c321c96b3d, type: 3}
-      propertyPath: requiredUI.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8052304309142861026, guid: 0f010fbdd32989649b72d1c321c96b3d, type: 3}
-      propertyPath: requiredUI.Array.data[1].uiType
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 8052304309142861026, guid: 0f010fbdd32989649b72d1c321c96b3d, type: 3}
-      propertyPath: requiredUI.Array.data[1].isOverlay
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8052304309142861026, guid: 0f010fbdd32989649b72d1c321c96b3d, type: 3}
-      propertyPath: requiredUI.Array.data[1].prefabName
-      value: ItemCursorSlot
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
