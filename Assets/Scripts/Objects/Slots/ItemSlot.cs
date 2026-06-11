@@ -22,6 +22,8 @@ public class ItemSlot
         return true;
     }
     public ItemContainer GetItem() => item;
+    public int GetStackable(ItemContainer wantItem) => Containable(wantItem) ? wantItem.maxStack - currentStack : 0;
+    public int GetStackable()      => GetStackable(item);
     public int GetStack()          => currentStack;
     public bool GetIsMax()         => item ? currentStack >= item.maxStack : false;
 
@@ -40,8 +42,8 @@ public class ItemSlot
         if (amount <= 0) return 0;
         if (!Containable(wantItem)) return amount;
         item =wantItem;
-        int stackable = Mathf.Max(item.maxStack - currentStack, amount);
-        currentStack += amount;
+        int stackable = Mathf.Min(item.maxStack - currentStack, amount);
+        currentStack += stackable;
         return amount - stackable;
     }
 
@@ -74,11 +76,78 @@ public class ItemSlot
         wantSlot.currentStack = wasStack;
     }
 
-    internal void LeftClick(ItemSlot wantSlot)
+    public int GiveItem(ItemSlot wantSlot) => GiveItem(wantSlot, currentStack);
+    
+    public int GiveItem(ItemSlot wantSlot, int amount)
     {
-        if(wantSlot is null) return;
-        ExChangeItem(wantSlot);
+        if (wantSlot is null) return amount;
+        if(!item) return amount;
+        if(currentStack <= 0 || amount <= 0) return amount;
+
+        ItemContainer targetItem = item;
+        amount = Mathf.Min(amount, wantSlot.GetStackable(targetItem));
+        amount -= RemoveItem(targetItem, amount);
+        amount = wantSlot.AddItem(targetItem, amount);
+
+        return amount;
+    }
+
+    public void LeftClick(ItemSlot wantSlot)
+    {
+        if (wantSlot is null) return;
+        if (InputManager.IsShift)
+        {
+            if (wantSlot.GetIsEmpty())
+            {
+                if (GetIsEmpty()) return;
+
+                else if (wantSlot.Containable(item))
+                {
+                    GiveItem(wantSlot, Mathf.CeilToInt(currentStack * 0.5f));
+                }
+            }
+            else if (Containable(wantSlot.item))
+            {
+                wantSlot.GiveItem(this, Mathf.CeilToInt(wantSlot.currentStack * 0.5f));
+            }
+        }
+        else
+        {
+            if (wantSlot.Containable(item))
+            {
+                GiveItem(wantSlot);
+            }
+            else
+            {
+                ExChangeItem(wantSlot);
+            }
+
+        }
         NoticeChanged();
         wantSlot?.NoticeChanged();
     }
+
+    public void RightClick(ItemSlot wantSlot)
+    {
+        //if (wantSlot == null) return;
+        //if (GetIsEmpty()) return;
+        //if (!wantSlot.Containable(item)) return;
+        //GiveItem(wantSlot, 1);
+
+        if (wantSlot is null) return;
+        if (InputManager.IsShift || wantSlot.GetIsEmpty())
+        { 
+            if(GetIsEmpty()) return;
+            if(wantSlot.Containable(item)) GiveItem(wantSlot, 1);
+            else return;
+        }
+        else
+        {
+            if (Containable(wantSlot.item)) wantSlot.GiveItem(this, 1);
+            else return;
+        }
+        NoticeChanged();
+        wantSlot.NoticeChanged();
+    }
 }
+

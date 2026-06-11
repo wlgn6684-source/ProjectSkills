@@ -31,7 +31,13 @@ public class InputManager : ManagerBase
     public static event MouseHoverEvent   OnMouseHover;    
     public static event ButtonEvent      OnMovementButton;    
     public static event ButtonEvent      OnInteractionButton;    
-    public static event ButtonEvent      OnRunningButton;    
+    public static event ButtonEvent      OnRunningButton;
+    public static bool IsShift { get; private set; } = false;
+    void ShiftInput(bool value)
+    {
+        IsShift = value;
+        OnRunningButton?.Invoke(value);
+    }
     public static event ButtonEvent      OnInsensiblyButton;    
     public static event ButtonEvent      OnTiltButton;    
     public static event ButtonEvent      OnMapButton;    
@@ -172,6 +178,9 @@ public class InputManager : ManagerBase
         InitializeAction("TapUp",            (context) => OnInventoryButton       ?.Invoke(false));
         InitializeAction("Cancel",           (context) => OnCancelButton          ?.Invoke(true));
         InitializeAction("AnyKey",           (context) => OnAnyKey                ?.Invoke());
+        InitializeAction("ShiftKey",         (context) =>  ShiftInput(true)
+                                ,            (context) =>  ShiftInput(false));
+
         
 
     }

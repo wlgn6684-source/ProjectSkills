@@ -426,6 +426,7 @@ MonoBehaviour:
   - prefabName: ExitUI
     uiType: 8
     isOpen: 0
+    isOverlay: 0
 --- !u!1 &7977453610841951610
 GameObject:
   m_ObjectHideFlags: 0

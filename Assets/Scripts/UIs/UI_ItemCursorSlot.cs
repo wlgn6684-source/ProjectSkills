@@ -11,6 +11,8 @@ public class UI_ItemCursorSlot : UI_ItemSlotInfo
         InputManager.OnMouseMove += MoveToMouse;
         InputManager.OnMouseLeftButton -= LeftButton;
         InputManager.OnMouseLeftButton += LeftButton;
+        InputManager.OnMouseRightButton -= RightButton;
+        InputManager.OnMouseRightButton += RightButton;
     }
 
 
@@ -20,6 +22,7 @@ public class UI_ItemCursorSlot : UI_ItemSlotInfo
         DisconnectSlot();
         InputManager.OnMouseMove -= MoveToMouse;
         InputManager.OnMouseLeftButton -= LeftButton;
+        InputManager.OnMouseRightButton -= RightButton;
     }
 
     void LeftButton(bool value, Vector2 screenPosition, Vector3 worldPosition)
@@ -31,10 +34,19 @@ public class UI_ItemCursorSlot : UI_ItemSlotInfo
         if (currentHover.TryGetComponent(out UI_ItemSlotInfo currentSlotInfo))
         {
             ConnectedSlot?.LeftClick(currentSlotInfo.ConnectedSlot);
+        }
+    }
+    void RightButton(bool value, Vector2 screenPosition, Vector3 worldPosition)
+    {
+        if (!value) return;
+        GameObject currentHover = InputManager.cursorHoverObject;
+        if (!currentHover) return;
+        
+        if (currentHover.TryGetComponent(out UI_ItemSlotInfo currentSlotInfo))
+        {
+            ConnectedSlot?.RightClick(currentSlotInfo.ConnectedSlot);
             
         }
-        
-        
     }
 
     void MoveToMouse(Vector2 screenPosition, Vector3 worldPosition)
