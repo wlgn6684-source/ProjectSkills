@@ -57,4 +57,12 @@ public class UI_InventoryWindow : OpenableUIBase
             ObjectManager.DestroyObject(targetChild.gameObject);
         }
     }
+
+    public void ClaimSort()
+    {
+        if (targetInventory)
+        { 
+            targetInventory.SortByType();
+        }
+    }
 }
