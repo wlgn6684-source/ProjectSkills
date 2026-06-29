@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
     UIManager _ui;
     public UIManager UI =>_ui;
 
+    DBManager _db;
+    public static DBManager DB =>_instance?._db;
+
     DataManager _data;
     public DataManager Data => _data;
 
@@ -113,6 +116,7 @@ public class GameManager : MonoBehaviour
     {   
        int totalLoadCount = 0;
        totalLoadCount += CreateManager(ref _ui).LoadCount;
+       totalLoadCount += CreateManager(ref _db).LoadCount;
        totalLoadCount += CreateManager(ref _data).LoadCount;
        totalLoadCount += CreateManager(ref _objectM).LoadCount;
        totalLoadCount += CreateManager(ref _save).LoadCount;
@@ -127,6 +131,8 @@ public class GameManager : MonoBehaviour
         UIBase loadingUI = UIManager.ClaimOpenScreen(UIType.Loading);
         IProgress<int> loadingProgress = loadingUI as IProgress<int>;
 
+        loadingProgress?.Set(0, totalLoadCount);
+        yield return DB.Connect(this);
         loadingProgress?.Set(0, totalLoadCount);
         yield return Data.Connect(this);
         loadingProgress?.AddCurrent(1);
@@ -193,6 +199,7 @@ public class GameManager : MonoBehaviour
         UI?.Disconnected();
         //데이터파일  DataManager
         Data?.Disconnected();
+        DB?.Disconnected();
     }
 
     ManagerType CreateManager<ManagerType>(ref ManagerType targetVarirable) where ManagerType : ManagerBase

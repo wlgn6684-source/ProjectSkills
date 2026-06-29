@@ -1,0 +1,30 @@
+{
+    "project_info": {
+        "project_number": "310095149522",
+        "firebase_url": "https://animalarena-7a686-default-rtdb.asia-southeast1.firebasedatabase.app",
+        "project_id": "animalarena-7a686",
+        "storage_bucket": "animalarena-7a686.firebasestorage.app"
+    },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310095149522:android:7046b21a4721249794300b",
+        "android_client_info": {
+          "package_name": "com.DeadManWakeUp.AnimalArena"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9Zk2r-Ibak_CeuhO5L4VYSJAIeK3Cnxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
