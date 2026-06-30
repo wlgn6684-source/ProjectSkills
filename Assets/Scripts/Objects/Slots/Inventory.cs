@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using UnityEditorInternal.VersionControl;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class Inventory : MonoBehaviour
 {

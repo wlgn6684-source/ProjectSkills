@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum StatType
@@ -69,16 +70,68 @@ public class StatModule : CharacterModule
     [Header("Utility")]
     [SerializeField] private StatValue lifeSteal;
 
-    public float MaxHp => maxHp.Value;
-    public float AttackPower => attackPower.Value;
-    public float AttackSpeed => attackSpeed.Value;
-    public float CriticalChance => criticalChance.Value;
-    public float CriticalMultiplier => criticalMultiplier.Value;
-    public float MoveSpeed => moveSpeed.Value;
-    public float ReloadSpeed => reloadSpeed.Value;
-    public float ProjectileSpeed => projectileSpeed.Value;
-    public float ProjectileRange => projectileRange.Value;
-    public float LifeSteal => lifeSteal.Value;
+    private Dictionary<StatType, StatValue> statTable;
 
+    public override void Initialize(CharacterBase owner)
+    {
+        base.Initialize(owner);
 
+        statTable = new Dictionary<StatType, StatValue>()
+    {
+        { StatType.MaxHp, maxHp },
+        { StatType.AttackPower, attackPower },
+        { StatType.MoveSpeed, moveSpeed },
+        { StatType.ReloadSpeed, reloadSpeed },
+        { StatType.ProjectileSpeed, projectileSpeed },
+        { StatType.ProjectileRange, projectileRange },
+        { StatType.AttackSpeed, attackSpeed },
+        { StatType.CriticalChance, criticalChance },
+        { StatType.CriticalMultiplier, criticalMultiplier },
+        { StatType.LifeSteal, lifeSteal }
+    };
+    }
+
+    public float GetStat(StatType type)
+    {
+        if (statTable.TryGetValue(type, out var stat))
+            return stat.Value;
+
+        return 0f;
+    }
+
+    public void AddStat(StatType type, float value)
+    {
+        if (!statTable.TryGetValue(type, out var stat))
+            return;
+
+        stat.AdditiveValue += value;
+    }
+
+    public void MultiplyStat(StatType type, float value)
+    {
+        if (!statTable.TryGetValue(type, out var stat))
+            return;
+
+        stat.Multiplier *= value;
+    }
+
+    public void ResetStatModifier(StatType type)
+    {
+        if (!statTable.TryGetValue(type, out var stat))
+            return;
+
+        stat.ResetModifier();
+    }
+
+    // 기존 사용 방식 유지
+    public float MaxHp => GetStat(StatType.MaxHp);
+    public float AttackPower => GetStat(StatType.AttackPower);
+    public float AttackSpeed => GetStat(StatType.AttackSpeed);
+    public float CriticalChance => GetStat(StatType.CriticalChance);
+    public float CriticalMultiplier => GetStat(StatType.CriticalMultiplier);
+    public float MoveSpeed => GetStat(StatType.MoveSpeed);
+    public float ReloadSpeed => GetStat(StatType.ReloadSpeed);
+    public float ProjectileSpeed => GetStat(StatType.ProjectileSpeed);
+    public float ProjectileRange => GetStat(StatType.ProjectileRange);
+    public float LifeSteal => GetStat(StatType.LifeSteal);
 }

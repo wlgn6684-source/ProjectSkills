@@ -15,4 +15,11 @@ public class CharacterModule : MonoBehaviour
     { 
         _owner = null;
     }
+
+    public virtual void Initialize(CharacterBase owner)
+    {
+        _owner = owner;
+    }
 }
+
+
