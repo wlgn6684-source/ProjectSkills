@@ -8,13 +8,14 @@ using System.Collections.Generic;
 using System.Security.Authentication;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class DBManager : ManagerBase
 {
-     FirebaseAuth authentication;
-     FirebaseUser user;
-     DatabaseReference rootDB;
+    FirebaseAuth authentication;
+    FirebaseUser user;
+    DatabaseReference rootDB;
 
     protected override IEnumerator OnConnected(GameManager newManager)
     {
@@ -24,7 +25,7 @@ public class DBManager : ManagerBase
 
     protected override void OnDisconnected()
     {
-     
+
     }
 
     void InitializeFireBase(Task<DependencyStatus> task)
@@ -38,28 +39,36 @@ public class DBManager : ManagerBase
             rootDB = FirebaseDatabase.DefaultInstance.RootReference;
 
             GuestLogin();
-            
+
             Debug.Log("Firebase Initialized");
 
         }
 
-        else 
+        else
         {
             Debug.LogError($"Fail to Intialize FireBase : {task.Exception}");
         }
     }
 
-    public void GuestLogin()
+    public async void GuestLogin()
     {
         if (authentication is null) return;
         if (user is not null)
         {
             Debug.LogError($"Login Failed : Already Has Login Data ({user.IsValid()},{user.UserId})");
-            WriteData(MakeNewUserData("천마"), "users", "userData", user.UserId);
-            return;
+            UserData resultData = await ReadDataAsync<UserData>("users", "userData", user.UserId);
+            if (resultData is not null)
+            {
+                Debug.Log(resultData.nickname);
+            }
+            else
+            { 
+                WriteData(MakeNewUserData("NoNamed"),"users", "userData", user.UserId);
+            }
+                return;
         }
 
-        authentication.SignInAnonymouslyAsync().ContinueWithOnMainThread(OnLoginResult);
+        await authentication.SignInAnonymouslyAsync().ContinueWithOnMainThread(OnLoginResult);
     }
 
     private void OnLoginResult(Task<AuthResult> task)
@@ -101,32 +110,71 @@ public class DBManager : ManagerBase
         attendtime = 0
     };
 
+    public DatabaseReference GetFinalDirectory(DatabaseReference root, params string[] directory)
+    {
+
+        if (directory is null || directory.Length == 0) return root;
+        DatabaseReference currentReference = root;
+        foreach (string currentChild in directory)
+        {
+            currentReference = currentReference.Child(currentChild);
+        }
+        return currentReference;
+    }
+
     public void WriteData(object wantData, params string[] directory)
     {
 
         if (rootDB is null || wantData is null) return;
 
         string jsonData = JsonUtility.ToJson(wantData);
-        DatabaseReference currentReference = rootDB;
-        foreach (string currentChild in directory)
-        {
-            currentReference = currentReference.Child(currentChild);
-        }
-        currentReference.SetRawJsonValueAsync(jsonData).ContinueWithOnMainThread(OnTaskResult);
-
-        Dictionary<string, object> item = new()
-        {
-            {"name","돌"},{"weight", 0.3 },{ "price", 1}
-        };
-        rootDB.Child("Items").Child("Misc").Child("Nature").Child("Stone").UpdateChildrenAsync(item).ContinueWithOnMainThread(OnTaskResult);
-        
+        GetFinalDirectory(rootDB, directory).SetRawJsonValueAsync(jsonData).ContinueWithOnMainThread(OnTaskResult);
     }
 
-    void OnTaskResult(Task task)
+    public void WriteData(Dictionary<string, object> changes, params string[] directory)
     {
-        if (task.IsCanceled || task.IsFaulted)
+        if (rootDB is null || changes is null) return;
+        GetFinalDirectory(rootDB, directory).UpdateChildrenAsync(changes).ContinueWithOnMainThread(OnTaskResult);
+
+    }
+
+    public void ReadData(Action<Task<DataSnapshot>> OnReadData, params string[] directory)
+    {
+        GetFinalDirectory(rootDB, directory).GetValueAsync().ContinueWithOnMainThread(OnReadData);
+
+    }
+    public IEnumerator ReadDataCoroutine(Action<Task<DataSnapshot>> OnReadData, params string[] directory)
+    {
+        Task<DataSnapshot> readTask = GetFinalDirectory(rootDB, directory).GetValueAsync();
+        yield return readTask.WaitforTask();
+        OnReadData.Invoke(readTask);
+    }
+
+    public async Task<T> ReadDataAsync<T>(params string[] directory)
+    {
+        DataSnapshot currentTask = await GetFinalDirectory(rootDB, directory).GetValueAsync();
+        if (currentTask is null) return default;
+        if (!currentTask.Exists) return default;
+        try
         {
-            Debug.LogError(task.Exception);
+            if (currentTask.HasChildren)
+            {
+              return JsonUtility.FromJson<T>(currentTask.GetRawJsonValue());
+            }
+            return (T)System.Convert.ChangeType(currentTask.Value, typeof(T));
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+            return default;
         }
     }
+
+        void OnTaskResult(Task task)
+        {
+            if (task.IsCanceled || task.IsFaulted)
+            {
+                Debug.LogError(task.Exception);
+            }
+        }
 }
